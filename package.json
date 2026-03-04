@@ -1,0 +1,48 @@
+{
+  "name": "anilog-temp",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@expo-google-fonts/dm-sans": "^0.4.2",
+    "@expo-google-fonts/dm-serif-display": "^0.4.2",
+    "@react-navigation/bottom-tabs": "^7.15.5",
+    "@react-navigation/native": "^7.1.33",
+    "@supabase/supabase-js": "^2.98.0",
+    "@tanstack/react-query": "^5.90.21",
+    "expo": "~55.0.4",
+    "expo-blur": "~55.0.8",
+    "expo-camera": "~55.0.9",
+    "expo-font": "^55.0.4",
+    "expo-haptics": "~55.0.8",
+    "expo-image": "~55.0.5",
+    "expo-linear-gradient": "~55.0.8",
+    "expo-location": "~55.1.2",
+    "expo-status-bar": "~55.0.4",
+    "nativewind": "^4.2.2",
+    "react": "19.2.0",
+    "react-native": "0.83.2",
+    "react-native-gesture-handler": "^2.30.0",
+    "react-native-reanimated": "^4.2.2",
+    "react-native-safe-area-context": "^5.7.0",
+    "react-native-screens": "^4.24.0",
+    "tailwindcss": "^3.4.19",
+    "zustand": "^5.0.11"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "@types/react-native": "^0.72.8",
+    "@typescript-eslint/eslint-plugin": "^8.56.1",
+    "@typescript-eslint/parser": "^8.56.1",
+    "eslint": "^10.0.2",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.8.1",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}

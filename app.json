@@ -1,0 +1,58 @@
+{
+  "expo": {
+    "name": "Anílog",
+    "slug": "anilog",
+    "version": "0.1.0",
+    "description": "Catch them for real.",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FAFAF5"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.anilog.app",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Anílog needs your camera to identify and capture animals in the wild.",
+        "NSLocationWhenInUseUsageDescription": "Anílog records your general region (city level only — never precise GPS) so you can remember where you found each Anímon.",
+        "NSPhotoLibraryUsageDescription": "Anílog does not access your photo library."
+      }
+    },
+    "android": {
+      "package": "com.anilog.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "backgroundColor": "#2D6A4F",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-image",
+      "expo-camera",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow Anílog to record your general region when capturing animals."
+        }
+      ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "your-eas-project-id"
+      }
+    }
+  }
+}
