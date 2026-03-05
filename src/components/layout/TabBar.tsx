@@ -1,17 +1,16 @@
 ﻿/**
- * TabBar â€” Field Naturalist Edition v2
+ * TabBar — v3 Clean Modern
  *
- * Physical instrument panel aesthetic:
- * - deviceBezel background (dark)
- * - 2px instrumentBrass top border (not metalBrush)
- * - Amber LED indicator dots (4px) â€” NOT green LEDs
- * - Icons: âŠ™ / âŠž / â—ˆ / â—‰  (âŠž for AnÃ­log = grid/collection)
- * - Camera disc: text aperture character, not emoji
- * - amberGlow active state for icons + labels
+ * White background, 1px top border, safe-area aware.
+ * 5 items: Discover | Anilog | [FAB camera] | Logbook | Profile
+ * Active: icon + label in accent + 4px dot below icon.
+ * Inactive: icon + label in text3.
+ * Centre FAB: 54px circle lifted 18px, accent gradient, white border.
  */
 
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
@@ -19,56 +18,63 @@ import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 
 const TAB_CONFIG: Record<string, { icon: string; label: string }> = {
-  index:      { icon: 'âŠ™', label: 'DISCOVER' },
-  anilog:     { icon: 'âŠž', label: 'ANÃLOG' },
-  milestones: { icon: 'â—ˆ', label: 'MILESTONES' },
-  profile:    { icon: 'â—‰', label: 'PROFILE' },
+  index:   { icon: '\u229E', label: 'Discover' },
+  anilog:  { icon: '\u25C8', label: 'Ani\u0301log' },
+  logbook: { icon: '\u25CE', label: 'Logbook' },
+  profile: { icon: '\u25D0', label: 'Profile' },
 };
 
-export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
+export function TabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
 
-  return (
-    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      {/* 2px brass top rule */}
-      <View style={styles.brassRule} />
+  const leftRoutes = state.routes.slice(0, 2);
+  const rightRoutes = state.routes.slice(2);
 
-      {/* Rivet details â€” physical panel feel */}
-      <View style={styles.rivetLeft} />
-      <View style={styles.rivetRight} />
+  return (
+    <View
+      style={[
+        styles.container,
+        { paddingBottom: insets.bottom > 0 ? insets.bottom : 8 },
+      ]}
+    >
+      {/* 1px top border */}
+      <View style={styles.topBorder} />
 
       {/* Left two tabs */}
-      {state.routes.slice(0, 2).map((route, index) => (
+      {leftRoutes.map((route, index) => (
         <TabItem
           key={route.key}
-          route={route}
+          routeName={route.name}
           isFocused={state.index === index}
           onPress={() => navigation.navigate(route.name)}
-          descriptors={descriptors}
         />
       ))}
 
-      {/* Centre camera disc */}
-      <View style={styles.cameraGap}>
+      {/* Centre FAB */}
+      <View style={styles.fabWrap}>
         <TouchableOpacity
-          style={styles.cameraButton}
+          style={styles.fabButton}
           onPress={() => router.push('/camera')}
-          activeOpacity={0.82}
+          activeOpacity={0.85}
         >
-          {/* Aperture text character â€” not emoji */}
-          <Text style={styles.cameraAperture}>â—Ž</Text>
-          <Text style={styles.cameraLabel}>SCAN</Text>
+          <LinearGradient
+            colors={[colors.accent, colors.accentDeep]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 1 }}
+            style={StyleSheet.absoluteFill}
+          />
+          {/* Camera icon — SVG approximated with unicode */}
+          <Text style={styles.fabIcon}>{'\u23F7'}</Text>
         </TouchableOpacity>
       </View>
 
       {/* Right two tabs */}
-      {state.routes.slice(2).map((route, index) => (
+      {rightRoutes.map((route, index) => (
         <TabItem
           key={route.key}
-          route={route}
+          routeName={route.name}
           isFocused={state.index === (index + 2)}
           onPress={() => navigation.navigate(route.name)}
-          descriptors={descriptors}
         />
       ))}
     </View>
@@ -76,14 +82,13 @@ export function TabBar({ state, descriptors, navigation }: BottomTabBarProps) {
 }
 
 interface TabItemProps {
-  route: { key: string; name: string };
+  routeName: string;
   isFocused: boolean;
   onPress: () => void;
-  descriptors: BottomTabBarProps['descriptors'];
 }
 
-function TabItem({ route, isFocused, onPress }: TabItemProps) {
-  const config = TAB_CONFIG[route.name];
+function TabItem({ routeName, isFocused, onPress }: TabItemProps) {
+  const config = TAB_CONFIG[routeName];
   if (!config) return null;
 
   return (
@@ -92,13 +97,6 @@ function TabItem({ route, isFocused, onPress }: TabItemProps) {
       onPress={onPress}
       activeOpacity={0.75}
     >
-      {/* Amber LED indicator dot */}
-      <View
-        style={[
-          styles.ledDot,
-          isFocused ? styles.ledActive : styles.ledInactive,
-        ]}
-      />
       <Text
         style={[
           styles.tabIcon,
@@ -107,6 +105,8 @@ function TabItem({ route, isFocused, onPress }: TabItemProps) {
       >
         {config.icon}
       </Text>
+      {/* Active dot */}
+      {isFocused && <View style={styles.activeDot} />}
       <Text
         style={[
           styles.tabLabel,
@@ -119,119 +119,74 @@ function TabItem({ route, isFocused, onPress }: TabItemProps) {
   );
 }
 
+const FAB_SIZE = 54;
+
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.surface,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    paddingTop: 10,
-    // Brass rule replaces borderTopWidth here â€” rendered as child View
+    paddingTop: 8,
     position: 'relative',
   },
-
-  // 2px instrumentBrass rule at top of bar
-  brassRule: {
+  topBorder: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 2,
-    backgroundColor: colors.instrumentBrass,
+    height: 1,
+    backgroundColor: colors.border,
   },
-
-  // Rivet details â€” small circles near top corners
-  rivetLeft: {
-    position: 'absolute',
-    top: 6,
-    left: 12,
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: colors.instrumentBrassLight,
-  },
-  rivetRight: {
-    position: 'absolute',
-    top: 6,
-    right: 12,
-    width: 5,
-    height: 5,
-    borderRadius: 2.5,
-    backgroundColor: colors.instrumentBrassLight,
-  },
-
-  // Tab item
   tab: {
     flex: 1,
     alignItems: 'center',
-    paddingTop: 6,
-    paddingBottom: 4,
-    gap: 3,
+    paddingTop: 2,
+    paddingBottom: 2,
+    gap: 2,
   },
-
-  // Amber LED dot
-  ledDot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginBottom: 2,
-  },
-  ledActive: {
-    backgroundColor: colors.amberGlow,
-    opacity: 1,
-    shadowColor: colors.amberGlow,
-    shadowRadius: 5,
-    shadowOpacity: 0.9,
-    elevation: 3,
-  },
-  ledInactive: {
-    backgroundColor: colors.inkFaded,
-    opacity: 0.35,
-  },
-
-  // Icon character
   tabIcon: {
     fontSize: 18,
   },
-  iconActive:   { color: colors.amberGlow },
-  iconInactive: { color: colors.inkFaded },
-
-  // Label
+  iconActive:   { color: colors.accent },
+  iconInactive: { color: colors.text3 },
+  activeDot: {
+    width: 4,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.accent,
+  },
   tabLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 8,
-    letterSpacing: typography.letterSpacing.wide,
+    letterSpacing: typography.letterSpacing.label,
   },
-  labelActive:   { color: colors.amberGlow },
-  labelInactive: { color: colors.inkFaded },
+  labelActive:   { color: colors.accent },
+  labelInactive: { color: colors.text3 },
 
-  // Camera disc
-  cameraGap: {
+  // Centre FAB
+  fabWrap: {
     width: 72,
     alignItems: 'center',
     paddingTop: 0,
   },
-  cameraButton: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
-    backgroundColor: colors.forestFloor,
-    borderWidth: 2,
-    borderColor: colors.instrumentBrass,
+  fabButton: {
+    width: FAB_SIZE,
+    height: FAB_SIZE,
+    borderRadius: FAB_SIZE / 2,
+    borderWidth: 2.5,
+    borderColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -16,  // raises disc above bar surface
-    gap: 1,
+    marginTop: -18,
+    overflow: 'hidden',
+    elevation: 8,
+    shadowColor: colors.accent,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
   },
-  cameraAperture: {
+  fabIcon: {
     fontSize: 22,
-    color: colors.amberGlow,
-  },
-  cameraLabel: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: 7,
-    color: colors.amberFaint,
-    letterSpacing: typography.letterSpacing.label,
+    color: colors.textInverse,
   },
 });
-
-

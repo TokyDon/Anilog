@@ -1,0 +1,12 @@
+Starting project at C:\Users\james\Documents\VS Code\Anílog
+Using src/app as the root directory for Expo Router.
+Metro is running in CI mode, reloads are disabled. Remove CI=true to enable watch mode.
+Starting Metro Bundler
+
+The following packages should be updated for best compatibility with the installed expo version:
+  react-native-worklets@0.7.4 - expected version: 0.7.2
+Your project may not work correctly until you install the expected versions of the packages.
+Waiting on http://localhost:8081
+Logs for your project will appear below.
+Web Bundled 1208ms node_modules\expo-router\entry.js (1433 modules)
+ LOG  [web] Logs will appear in the browser console

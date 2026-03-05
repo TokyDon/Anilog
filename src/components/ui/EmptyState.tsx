@@ -1,9 +1,5 @@
 ﻿/**
- * EmptyState â€” Field Naturalist Edition v2
- *
- * Domain-appropriate empty state: no emoji as icon â€” uses a circular
- * inkRule-bordered disc instead. Playfair italic title, DM Sans description,
- * forestFloor CTA button.
+ * EmptyState — v3 Clean Modern
  */
 
 import React from 'react';
@@ -26,7 +22,6 @@ export function EmptyState({
 }: EmptyStateProps) {
   return (
     <View style={styles.container}>
-      {/* Domain icon disc â€” archival circle placeholder */}
       <View style={styles.iconDisc} />
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.description}>{description}</Text>
@@ -50,50 +45,41 @@ const styles = StyleSheet.create({
     paddingHorizontal: 40,
     gap: 12,
   },
-
-  // Circular domain icon disc
   iconDisc: {
     width: 48,
     height: 48,
     borderRadius: 24,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     marginBottom: 4,
   },
-
   title: {
-    fontFamily: typography.fontFamily.heading,
-    fontStyle: 'italic',
+    fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.md,
-    color: colors.inkFaded,
+    color: colors.text2,
     textAlign: 'center',
-    lineHeight: typography.fontSize.md * typography.lineHeight.heading,
   },
   description: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.base,
-    color: colors.inkGhost,
+    color: colors.text3,
     textAlign: 'center',
     lineHeight: typography.fontSize.base * typography.lineHeight.normal,
   },
-
-  // CTA â€” forestFloor background, mossLight text
   cta: {
     marginTop: 8,
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.accent,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    borderRadius: 4,
+    borderRadius: 99,
   },
   ctaPressed: {
     opacity: 0.75,
   },
   ctaLabel: {
-    fontFamily: typography.fontFamily.bodyMedium,
+    fontFamily: typography.fontFamily.bodySemiBold,
     fontSize: typography.fontSize.sm,
-    color: colors.mossLight,
-    letterSpacing: typography.letterSpacing.wide,
+    color: colors.textInverse,
+    letterSpacing: typography.letterSpacing.label,
   },
 });
-
-

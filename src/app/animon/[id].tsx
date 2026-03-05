@@ -110,7 +110,7 @@ export default function AnimonDetailScreen() {
             {animon.types.map((t) => (
               <TypeTagChip key={t} type={t} />
             ))}
-            <RarityBadge rarity={animon.rarity} size="md" />
+            <RarityBadge rarity={animon.rarity} />
           </View>
           <Text style={styles.dataDate}>
             {formatDate(animon.capturedAt)} · {animon.region}
@@ -163,7 +163,7 @@ export default function AnimonDetailScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.specimenCream,
+    backgroundColor: colors.bg,
   },
 
   // Hero
@@ -188,10 +188,10 @@ const styles = StyleSheet.create({
     right: 20,
   },
   heroSpecies: {
-    fontFamily: typography.fontFamily.headingBlack,
+    fontFamily: typography.fontFamily.bodyExtra,
     fontSize: typography.fontSize['3xl'],
     fontStyle: 'italic',
-    color: colors.inkInverse,
+    color: colors.textInverse,
     lineHeight: 36,
     textShadowColor: 'rgba(0,0,0,0.50)',
     textShadowOffset: { width: 0, height: 2 },
@@ -225,14 +225,14 @@ const styles = StyleSheet.create({
   },
   backIcon: {
     fontSize: 18,
-    color: colors.inkInverse,
+    color: colors.textInverse,
     fontFamily: typography.fontFamily.bodyBold,
   },
 
   // Bottom sheet
   sheet: {
     flex: 1,
-    backgroundColor: colors.cardStock,
+    backgroundColor: colors.surface2,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
   },
@@ -243,7 +243,7 @@ const styles = StyleSheet.create({
   sheetHandle: {
     width: 40,
     height: 4,
-    backgroundColor: colors.inkRule,
+    backgroundColor: colors.border,
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 18,
@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
   dataDate: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 0.8,
   },
 
@@ -272,24 +272,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: colors.cardStock,
+    backgroundColor: colors.surface2,
     borderRadius: 8,
     paddingHorizontal: 14,
     paddingVertical: 8,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
   },
   idLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: colors.inkBlack,
+    color: colors.text1,
     letterSpacing: 1.5,
   },
   idValue: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 16,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 1,
   },
 
@@ -304,39 +304,39 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: '44%',
     height: 80,
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.bezel,
     borderRadius: 12,
     padding: 14,
     gap: 6,
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.instrumentBrass,
+    borderColor: colors.borderStrong,
   },
   statLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 10,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 1.5,
   },
   statValue: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 17,
-    color: colors.inkAmber,
+    color: colors.accent,
   },
 
   // Capture notes
   notesCard: {
-    backgroundColor: colors.parchment,
+    backgroundColor: colors.surface,
     borderRadius: 14,
     padding: 16,
     gap: 0,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
   },
   notesTitle: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 2,
     marginBottom: 12,
   },
@@ -347,30 +347,30 @@ const styles = StyleSheet.create({
   },
   noteSep: {
     height: 1,
-    backgroundColor: colors.inkRule,
+    backgroundColor: colors.border,
   },
   noteKey: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 1,
   },
   noteVal: {
     fontFamily: typography.fontFamily.bodyMedium,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBlack,
+    color: colors.text1,
   },
 
   // Not found
   notFound: {
     flex: 1,
-    backgroundColor: colors.specimenCream,
+    backgroundColor: colors.bg,
     alignItems: 'center',
     justifyContent: 'center',
   },
   notFoundText: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.base,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
 });

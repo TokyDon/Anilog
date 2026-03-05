@@ -33,7 +33,7 @@ const ACHIEVEMENTS = [
   { id: 'global_trainer', title: 'Global Trainer',   description: 'Catch Anímon on 5 continents',          emoji: '🌎', tier: 'Gold'   as const, unlocked: false },
 ];
 
-const TIER_COLORS = { Bronze: colors.inkFaded, Silver: colors.lichenGray, Gold: colors.amberResin };
+const TIER_COLORS = { Bronze: colors.text3, Silver: colors.text2, Gold: colors.rarity.uncommon };
 
 function SectionRule({ label }: { label: string }) {
   return (
@@ -53,11 +53,11 @@ const sectionRuleStyles = StyleSheet.create({
     marginBottom: 12,
     gap: 10,
   },
-  line: { flex: 1, height: 1, backgroundColor: colors.inkRule },
+  line: { flex: 1, height: 1, backgroundColor: colors.border },
   label: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: typography.letterSpacing.widest,
     textTransform: 'uppercase',
   },
@@ -76,7 +76,7 @@ export default function MilestonesScreen() {
         <View style={styles.header}>
           <View>
             <Text style={styles.wordmark}>ANÍLOG</Text>
-            <Text style={styles.screenTitle}>Milestones</Text>
+            <Text style={styles.screenTitle}>Logbook</Text>
           </View>
           <View style={styles.specimenBadge}>
             <Text style={styles.specimenBadgeText}>
@@ -102,7 +102,7 @@ export default function MilestonesScreen() {
         <View style={styles.rarityGrid}>
           {RARITY_DATA.map((r) => (
             <View key={r.rarity} style={styles.rarityCell}>
-              <RarityBadge rarity={r.rarity} size="lg" />
+              <RarityBadge rarity={r.rarity} />
               <Text style={[styles.rarityCount, { color: colors.rarity[r.rarity] }]}>
                 {r.count}
               </Text>
@@ -160,13 +160,13 @@ export default function MilestonesScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.deviceBody,
+    backgroundColor: colors.bg,
   },
   scrollContent: { paddingBottom: 16 },
 
-  // Dark forestFloor header
+  // Dark header
   header: {
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     paddingHorizontal: 20,
     paddingVertical: 16,
     flexDirection: 'row',
@@ -177,20 +177,19 @@ const styles = StyleSheet.create({
   wordmark: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
-    color: colors.amberGlow,
+    color: colors.text3,
     letterSpacing: 4,
     textTransform: 'uppercase',
   },
   screenTitle: {
-    fontFamily: typography.fontFamily.heading,
-    fontStyle: 'italic',
+    fontFamily: typography.fontFamily.bodySemiBold,
     fontSize: typography.fontSize['3xl'],
-    color: colors.inkInverse,
-    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.heading,
+    color: colors.textInverse,
+    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
   },
   specimenBadge: {
     borderWidth: 1,
-    borderColor: colors.instrumentBrass,
+    borderColor: colors.borderStrong,
     borderRadius: 3,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -198,19 +197,19 @@ const styles = StyleSheet.create({
   specimenBadgeText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkAmber,
+    color: colors.accent,
     letterSpacing: typography.letterSpacing.label,
   },
 
-  // Progress gauge — parchment panel
+  // Progress gauge
   gaugePanel: {
     marginHorizontal: 20,
     marginBottom: 24,
-    backgroundColor: colors.parchment,
+    backgroundColor: colors.surface,
     borderRadius: 4,
     padding: 16,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
   },
   gaugeLabelRow: {
     flexDirection: 'row',
@@ -220,32 +219,32 @@ const styles = StyleSheet.create({
   gaugeLabel: {
     fontFamily: typography.fontFamily.bodyMedium,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBrown,
+    color: colors.text2,
     letterSpacing: typography.letterSpacing.label,
     textTransform: 'uppercase',
   },
   gaugeFraction: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
   gaugeTrack: {
     height: 8,
     borderRadius: 2,
-    backgroundColor: colors.insetPanel,
+    backgroundColor: colors.surface2,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     overflow: 'hidden',
   },
   gaugeFill: {
     height: 8,
     borderRadius: 2,
-    backgroundColor: colors.forestMid,
+    backgroundColor: colors.accent,
   },
   gaugePct: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkFaded,
+    color: colors.text3,
     marginTop: 8,
     textAlign: 'right',
     letterSpacing: 1,
@@ -262,12 +261,12 @@ const styles = StyleSheet.create({
   rarityCell: {
     flex: 1,
     minWidth: (SCREEN_WIDTH - 52) / 2,
-    backgroundColor: colors.cardStock,
+    backgroundColor: colors.surface2,
     borderRadius: 3,
     padding: 16,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
   },
   rarityCount: {
     fontFamily: typography.fontFamily.monoBold,
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily.body,
     fontSize: 10,
     textTransform: 'uppercase',
-    color: colors.inkFaded,
+    color: colors.text3,
     marginTop: 4,
     letterSpacing: 1,
   },
@@ -292,7 +291,7 @@ const styles = StyleSheet.create({
   achievementCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.parchment,
+    backgroundColor: colors.surface,
     borderRadius: 3,
     overflow: 'hidden',
     paddingVertical: 14,
@@ -300,7 +299,7 @@ const styles = StyleSheet.create({
     paddingRight: 16,
     gap: 14,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     position: 'relative',
   },
   achievementLocked: { opacity: 0.45 },
@@ -314,31 +313,31 @@ const styles = StyleSheet.create({
   achievementSymbol: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 28,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
   achievementText: { flex: 1, gap: 2 },
   achievementTitle: {
     fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.base,
-    color: colors.inkBlack,
+    color: colors.text1,
   },
-  dimText: { color: colors.inkFaded },
+  dimText: { color: colors.text3 },
   achievementDesc: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBrown,
+    color: colors.text2,
     lineHeight: typography.fontSize.sm * typography.lineHeight.normal,
   },
   checkmark: {
     width: 24,
     height: 24,
     borderRadius: 2,
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     alignItems: 'center',
     justifyContent: 'center',
   },
   checkmarkText: {
-    color: colors.inkInverse,
+    color: colors.textInverse,
     fontSize: 12,
     fontFamily: typography.fontFamily.bodyBold,
   },

@@ -187,7 +187,7 @@ export default function CameraScreen() {
               colors={
                 captureState === 'scanning'
                   ? ['#3A3530', '#2C2416', '#3A3530']
-                  : [colors.amberDeep, colors.amberResin, colors.amberGlow, colors.amberResin, colors.amberDeep]
+                  : [colors.accentDeep, colors.accent, colors.borderStrong, colors.accent, colors.accentDeep]
               }
               style={styles.shutterOuter}
             >
@@ -232,8 +232,8 @@ export default function CameraScreen() {
         </View>
 
         <View style={styles.resultRarity}>
-          <RarityBadge rarity={MOCK_RESULT.rarity} size="lg" />
-          <Text style={[styles.resultRegion, { color: colors.amberResin }]}>◉ {MOCK_RESULT.region}</Text>
+          <RarityBadge rarity={MOCK_RESULT.rarity} />
+          <Text style={[styles.resultRegion, { color: colors.accentDeep }]}>◉ {MOCK_RESULT.region}</Text>
         </View>
 
         <View style={styles.resultActions}>
@@ -252,7 +252,7 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.bezel,
   },
   viewfinder: {
     ...StyleSheet.absoluteFillObject,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     height: RETICLE_SIZE + 28,
     borderRadius: (RETICLE_SIZE + 28) / 2,
     borderWidth: 2,
-    borderColor: colors.amberGlow,
+    borderColor: colors.text3,
   },
   reticle: {
     width: RETICLE_SIZE,
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: CORNER,
     height: CORNER,
-    borderColor: colors.amberGlow,
+    borderColor: colors.text3,
   },
   cornerTL: {
     top: 0, left: 0,
@@ -326,9 +326,9 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: 2,
-    backgroundColor: colors.amberGlow,
+    backgroundColor: colors.text3,
     opacity: 0.75,
-    shadowColor: colors.amberGlow,
+    shadowColor: colors.text3,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.80,
     shadowRadius: 6,
@@ -337,7 +337,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 13,
-    color: colors.inkAmber,
+    color: colors.accent,
     letterSpacing: 2,
   },
 
@@ -347,14 +347,14 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.bezel,
     paddingTop: 52,
     paddingBottom: 12,
     paddingHorizontal: 20,
     flexDirection: 'row',
     alignItems: 'center',
     borderBottomWidth: 1,
-    borderBottomColor: colors.instrumentBrass,
+    borderBottomColor: colors.borderStrong,
   },
   closeBtn: {
     width: 36,
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   closeIcon: {
-    color: colors.inkInverse,
+    color: colors.textInverse,
     fontSize: 15,
     fontFamily: typography.fontFamily.bodyBold,
   },
@@ -373,7 +373,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontFamily: typography.fontFamily.mono,
     fontSize: 13,
-    color: colors.inkAmber,
+    color: colors.accent,
     textAlign: 'center',
     letterSpacing: 2,
   },
@@ -384,13 +384,13 @@ const styles = StyleSheet.create({
   modeActive: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 11,
-    color: colors.inkAmber,
+    color: colors.accent,
     letterSpacing: 1,
   },
   modeInactive: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 1,
   },
 
@@ -400,9 +400,9 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.bezel,
     borderTopWidth: 1,
-    borderTopColor: colors.instrumentBrass,
+    borderTopColor: colors.borderStrong,
     paddingVertical: 24,
     paddingHorizontal: 40,
     flexDirection: 'row',
@@ -414,9 +414,9 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 10,
-    backgroundColor: colors.instrumentBrass,
+    backgroundColor: colors.borderStrong,
     borderWidth: 1,
-    borderColor: colors.instrumentBrassLight,
+    borderColor: colors.border,
   },
   shutterOuter: {
     width: 72,
@@ -424,7 +424,7 @@ const styles = StyleSheet.create({
     borderRadius: 36,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: colors.amberGlow,
+    shadowColor: colors.text3,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.55,
     shadowRadius: 10,
@@ -442,11 +442,11 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 10,
-    backgroundColor: colors.instrumentBrass,
+    backgroundColor: colors.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.instrumentBrassLight,
+    borderColor: colors.border,
   },
   flashIcon: { fontSize: 20 },
 
@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: colors.cardStock,
+    backgroundColor: colors.surface2,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     padding: 24,
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
   resultHandle: {
     width: 40,
     height: 4,
-    backgroundColor: colors.inkRule,
+    backgroundColor: colors.border,
     borderRadius: 2,
     alignSelf: 'center',
     marginBottom: 4,
@@ -479,7 +479,7 @@ const styles = StyleSheet.create({
   captureConfirm: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.mossLight,
+    color: colors.success,
     letterSpacing: 1.5,
     textAlign: 'center',
   },
@@ -493,24 +493,24 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 12,
     borderWidth: 1.5,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
   },
   resultInfo: { flex: 1, gap: 4 },
   resultSpecies: {
-    fontFamily: typography.fontFamily.headingBold,
+    fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize['2xl'],
-    color: colors.inkBlack,
+    color: colors.text1,
     lineHeight: typography.fontSize['2xl'] * 1.12,
   },
   resultBreed: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
   resultConfidence: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkAmber,
+    color: colors.accent,
     letterSpacing: 1,
   },
   resultTags: {
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
   resultRegion: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
   resultActions: {
     flexDirection: 'row',
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
   retryBtn: {
     flex: 1,
     borderWidth: 1.5,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
@@ -544,18 +544,18 @@ const styles = StyleSheet.create({
   retryBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.inkBrown,
+    color: colors.text2,
     letterSpacing: 1,
   },
   addBtn: {
     flex: 2,
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: colors.amberGlow,
-    shadowColor: colors.amberGlow,
+    borderColor: colors.text3,
+    shadowColor: colors.text3,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.40,
     shadowRadius: 8,
@@ -564,7 +564,7 @@ const styles = StyleSheet.create({
   addBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.inkInverse,
+    color: colors.textInverse,
     letterSpacing: 1,
   },
 });

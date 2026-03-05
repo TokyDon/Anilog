@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Anílog v3 — Design Prototype</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+
+/* ====================================
+   DESIGN TOKENS — V3 CLEAN MODERN
+   ==================================== */
+:root {
+  /* === Neutrals (the quiet base) === */
+  --bg:            #F1F4F9;       /* app shell background      */
+  --surface:       #FFFFFF;       /* cards, sheets, bars       */
+  --surface-2:     #F8FAFC;       /* slightly raised surface   */
+  --border:        #E2E8F0;       /* subtle dividers           */
+  --border-strong: #CBD5E1;       /* stronger dividers         */
+
+  /* === Text === */
+  --text-1:   #0F172A;            /* primary                   */
+  --text-2:   #475569;            /* secondary                 */
+  --text-3:   #94A3B8;            /* tertiary / placeholders   */
+  --text-inv: #FFFFFF;            /* on dark surfaces          */
+
+  /* === Brand Accent (neutral grey — game content provides ALL colour) === */
+  --accent:      #64748B;         /* slate-500 — neutral chrome */
+  --accent-soft: #F1F5F9;         /* slate-100 tint             */
+  --accent-deep: #334155;         /* slate-700 pressed          */
+
+  /* === Rarity === */
+  --r-common:   #94A3B8;
+  --r-uncommon: #22C55E;
+  --r-rare:     #6366F1;
+  /* glossy uses animated gradient — see .rarity-badge.glossy */
+
+  /* === Type Chip Colours (vivid — the main colour source in UI) === */
+  --t-fire:     #EF4444;
+  --t-water:    #3B82F6;
+  --t-grass:    #22C55E;
+  --t-electric: #EAB308;
+  --t-ice:      #06B6D4;
+  --t-dragon:   #8B5CF6;
+  --t-psychic:  #EC4899;
+  --t-bug:      #84CC16;
+  --t-steel:    #64748B;
+  --t-ground:   #D97706;
+  --t-rock:     #78716C;
+  --t-light:    #F59E0B;
+
+  /* === Card image gradients (derived from type) === */
+  /* See utility classes .grad-* below */
+
+  /* === Device chrome === */
+  --bezel:    #1E293B;
+  --nav-dark: #0F172A;
+}
+
+/* ====================================
+   RESET + BASE
+   ==================================== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #080C18;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: var(--text-inv);
+  min-height: 100vh;
+  padding: 48px 32px 80px;
+}
+
+/* ====================================
+   PAGE HEADER
+   ==================================== */
+.version-tag {
+  display: inline-block;
+  background: rgba(100,116,139,0.12);
+  color: var(--accent);
+  border: 1px solid rgba(100,116,139,0.25);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 99px;
+  margin-bottom: 14px;
+}
+.page-title {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+.page-title span { color: var(--accent); }
+.page-sub {
+  font-size: 13px;
+  color: #475569;
+  margin-bottom: 48px;
+  font-weight: 400;
+}
+
+/* ====================================
+   FRAMES SCROLL ROW
+   ==================================== */
+.frames-row {
+  display: flex;
+  gap: 32px;
+  overflow-x: auto;
+  padding-bottom: 24px;
+  align-items: flex-start;
+  scrollbar-color: #334155 #080C18;
+}
+.frames-row::-webkit-scrollbar { height: 6px; }
+.frames-row::-webkit-scrollbar-track { background: #080C18; }
+.frames-row::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+.frame-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.frame-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: #475569;
+  text-transform: uppercase;
+}
+
+/* ====================================
+   PHONE FRAME
+   ==================================== */
+.phone-frame {
+  width: 390px;
+  height: 844px;
+  background: var(--bezel);
+  border-radius: 48px;
+  overflow: hidden;
+  position: relative;
+  box-shadow:
+    0 0 0 2px #080C18,
+    0 0 0 3px #334155,
+    0 0 0 5px #080C18,
+    0 32px 80px rgba(0,0,0,0.65);
+  display: flex;
+  flex-direction: column;
+}
+.phone-frame::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 118px;
+  height: 28px;
+  background: var(--bezel);
+  border-radius: 14px;
+  z-index: 100;
+}
+.screen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ====================================
+   STATUS BAR
+   ==================================== */
+.status-bar {
+  height: 52px;
+  padding: 14px 20px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+.status-bar.dark        { background: var(--nav-dark); }
+.status-bar.transparent { background: transparent; position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
+.status-time {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-1);
+}
+.status-time.light { color: rgba(255,255,255,0.9); }
+.status-icons { font-size: 10px; color: var(--text-3); letter-spacing: 2px; }
+.status-icons.light { color: rgba(255,255,255,0.4); }
+
+/* ====================================
+   SCROLL AREA
+   ==================================== */
+.scroll-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  background: var(--bg);
+}
+.scroll-content::-webkit-scrollbar { display: none; }
+
+/* ====================================
+   TAB BAR
+   ==================================== */
+.tab-bar {
+  height: 72px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 8px 12px;
+  flex-shrink: 0;
+}
+.tab-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+.tab-icon { font-size: 20px; color: var(--text-3); line-height: 1; }
+.tab-item.active .tab-icon  { color: var(--accent); }
+.tab-dot  { width: 4px; height: 4px; border-radius: 50%; background: transparent; }
+.tab-item.active .tab-dot   { background: var(--accent); }
+.tab-label { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-3); }
+.tab-item.active .tab-label { color: var(--accent); }
+
+/* Camera FAB */
+.camera-fab {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(51,65,85,0.4);
+  cursor: pointer;
+  margin-top: -18px;
+  flex-shrink: 0;
+  border: 2.5px solid var(--surface);
+}
+
+/* ====================================
+   SCREEN HEADERS
+   ==================================== */
+.screen-header {
+  background: var(--surface);
+  padding: 10px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.screen-title {
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--text-1);
+  letter-spacing: -0.4px;
+}
+.screen-subtitle {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--text-3);
+  letter-spacing: 1px;
+  margin-top: 2px;
+}
+
+/* ====================================
+   SECTION LABELS
+   ==================================== */
+.section-header { padding: 14px 20px 8px; }
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+/* ====================================
+   SEARCH BAR
+   ==================================== */
+/* COMPONENT: SearchBar
+   Props: placeholder, value
+   Tokens: --surface, --border, --text-3
+   Notes: Clean input, neutral, doesn't compete with content */
+.search-bar {
+  margin: 8px 16px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.search-icon { font-size: 16px; color: var(--text-3); }
+.search-placeholder { font-size: 14px; color: var(--text-3); }
+
+/* ====================================
+   TYPE CHIP — vivid pills (primary colour source)
+   ==================================== */
+/* COMPONENT: TypeTagChip
+   Props: type = "fire"|"water"|"grass"|"electric"|"ice"|"dragon"|"psychic"|"bug"|"steel"|"ground"|"rock"|"light"
+   Tokens: type-specific vivid background, white text (dark on yellow/lime types)
+   Notes: Rounded fully. The chips + card gradients are WHERE ALL colour lives in the UI. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: #FFFFFF;
+  line-height: 1.5;
+  flex-shrink: 0;
+}
+.chip.fire     { background: var(--t-fire); }
+.chip.water    { background: var(--t-water); }
+.chip.grass    { background: var(--t-grass); }
+.chip.electric { background: var(--t-electric); color: var(--text-1); }
+.chip.ice      { background: var(--t-ice); }
+.chip.dragon   { background: var(--t-dragon); }
+.chip.psychic  { background: var(--t-psychic); }
+.chip.bug      { background: var(--t-bug); color: var(--text-1); }
+.chip.steel    { background: var(--t-steel); }
+.chip.ground   { background: var(--t-ground); }
+.chip.rock     { background: var(--t-rock); }
+.chip.light    { background: var(--t-light); color: var(--text-1); }
+
+/* ====================================
+   RARITY BADGE
+   ==================================== */
+/* COMPONENT: RarityBadge
+   Props: rarity = "common"|"uncommon"|"rare"|"glossy"
+   Tokens: rarity-specific colours
+   Notes: Dot + label. Glossy = animated gradient text. */
+.rarity-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 99px;
+}
+.rarity-badge::before {
+  content: '';
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.rarity-badge.common   { background: rgba(148,163,184,0.12); color: var(--r-common); }
+.rarity-badge.common::before { background: var(--r-common); }
+.rarity-badge.uncommon { background: rgba(34,197,94,0.10); color: var(--r-uncommon); }
+.rarity-badge.uncommon::before { background: var(--r-uncommon); }
+.rarity-badge.rare     { background: rgba(99,102,241,0.10); color: var(--r-rare); }
+.rarity-badge.rare::before { background: var(--r-rare); }
+.rarity-badge.glossy   { background: rgba(245,158,11,0.08); }
+.rarity-badge.glossy::before { background: linear-gradient(90deg,#F59E0B,#EC4899); animation: gdot 2s linear infinite; }
+.glossy-text {
+  background: linear-gradient(90deg, #F59E0B, #EC4899, #6366F1, #F59E0B);
+  background-size: 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gflow 2.5s linear infinite;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+@keyframes gflow { 0% { background-position: 0%; } 100% { background-position: 200%; } }
+@keyframes gdot  { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* ====================================
+   TYPE-DERIVED CARD GRADIENTS
+   ==================================== */
+.grad-fire-psychic { background: linear-gradient(140deg, #7F1D1D 0%, #831843 55%, #1E1B4B 100%); }
+.grad-rock-water   { background: linear-gradient(140deg, #1C1917 0%, #1C3B5C 100%); }
+.grad-bug-light    { background: linear-gradient(140deg, #1A2E05 0%, #713F12 100%); }
+.grad-ground-steel { background: linear-gradient(140deg, #431407 0%, #1E293B 100%); }
+.grad-ice-dragon   { background: linear-gradient(140deg, #0C4A6E 0%, #3B0764 100%); }
+.grad-grass-water  { background: linear-gradient(140deg, #052E16 0%, #0C4A6E 100%); }
+.grad-water        { background: linear-gradient(140deg, #1E3A8A 0%, #0C4A6E 100%); }
+.grad-ground       { background: linear-gradient(140deg, #431407 0%, #78350F 100%); }
+.grad-empty        { background: linear-gradient(140deg, #1E293B 0%, #0F172A 100%); }
+
+/* ====================================
+   ANIMON CARD — FULL (v3 signature)
+   ==================================== */
+/* COMPONENT: AnimonCard (full)
+   Props: name, species, accession, type[], rarity, region, gradientClass, capturePhoto?
+   Tokens: --surface (face), type-gradient (image area), --nav-dark (footer strip)
+   Signature: Dark footer strip is the defining visual element of Anílog cards
+   Variants: full (default 220px), compact (140px with mini footer) */
+.animon-card-full {
+  margin: 0 16px 12px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 8px rgba(15,23,42,0.08), 0 8px 24px rgba(15,23,42,0.04);
+  flex-shrink: 0;
+}
+.card-image-area {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.card-image-area::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50px;
+  background: linear-gradient(to bottom, transparent, rgba(15,23,42,0.4));
+}
+.card-placeholder { font-size: 52px; opacity: 0.22; filter: brightness(0) invert(1); z-index: 1; }
+.card-rarity-pill { position: absolute; top: 10px; right: 10px; z-index: 2; }
+
+/* DARK FOOTER — the signature */
+.card-footer-strip {
+  background: var(--nav-dark);
+  padding: 8px 12px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-shrink: 0;
+  min-height: 60px;
+}
+.footer-left { flex: 1; min-width: 0; }
+.card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.2;
+}
+.card-species {
+  font-family: 'Space Mono', monospace;
+  font-style: italic;
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.footer-chips    { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
+.footer-right    { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+.card-accession  { font-family: 'Space Mono', monospace; font-size: 8px; color: rgba(255,255,255,0.28); }
+.card-region     { font-size: 9px; font-weight: 500; color: rgba(255,255,255,0.45); }
+
+/* ====================================
+   ANIMON CARD — COMPACT (v3)
+   ==================================== */
+/* COMPONENT: AnimonCard (compact)
+   Props: name, type[], gradientClass, rarity
+   Tokens: type gradient (image area), --nav-dark (mini footer) */
+.animon-card-compact {
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 2px 6px rgba(15,23,42,0.07);
+  flex-shrink: 0;
+}
+.compact-image {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+.compact-footer { background: var(--nav-dark); padding: 6px 8px; flex-shrink: 0; }
+.compact-name   { font-size: 10px; font-weight: 700; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.compact-chips  { display: flex; gap: 3px; margin-top: 4px; }
+
+/* ====================================
+   SOCIAL POST
+   ==================================== */
+/* COMPONENT: SocialPost
+   Props: user{name,handle,avatarGradient}, time, location, text, embeddedCard?, likeCount, commentCount, canTrade
+   Tokens: --surface, --border, --text-1/2/3, --accent (trade CTA)
+   Notes: Trade button only visible if this user has that species in their collection */
+.social-post {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 16px;
+}
+.post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.post-avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 800; color: white; flex-shrink: 0;
+}
+.post-meta  { flex: 1; }
+.post-uname { font-size: 13px; font-weight: 700; color: var(--text-1); }
+.post-time  { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--text-3); margin-top: 1px; }
+.post-text  { font-size: 13px; color: var(--text-2); line-height: 1.55; margin-bottom: 10px; }
+.post-text strong { color: var(--text-1); font-weight: 700; }
+.post-actions { display: flex; gap: 14px; align-items: center; }
+.post-action { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-3); cursor: pointer; }
+.post-action.trade { color: var(--accent); background: var(--accent-soft); border-radius: 99px; padding: 4px 12px; }
+
+/* ====================================
+   Logbook ENTRY (Stamp Grid)
+   ==================================== */
+/* COMPONENT: LogbookEntry
+   Props: name, species, captureCount, captured=bool, gradientClass
+   Tokens: gradient (captured), --nav-dark (label)
+   Notes: stamp = captureCount. ??? label until first capture. greyscale filter when uncaptured. */
+.Logbook-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 8px 16px; }
+.Logbook-entry {
+  background: var(--surface);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 96px;
+  position: relative;
+  box-shadow: 0 1px 4px rgba(15,23,42,0.06);
+}
+.Logbook-img {
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 30px;
+}
+.Logbook-stamp {
+  position: absolute; top: 6px; right: 6px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(100,116,139,0.3);
+}
+.Logbook-lbl  { background: var(--nav-dark); padding: 4px 6px; flex-shrink: 0; }
+.Logbook-name { font-size: 8px; font-weight: 700; color: white; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.Logbook-entry.uncaptured { filter: grayscale(1) opacity(0.35); }
+
+/* ====================================
+   PROFILE
+   ==================================== */
+.profile-hero {
+  background: linear-gradient(160deg, #1E293B 0%, #0F172A 100%);
+  padding: 24px 20px 20px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 8px; flex-shrink: 0;
+}
+.profile-avatar {
+  width: 72px; height: 72px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 800; color: white;
+  box-shadow: 0 0 0 3px rgba(100,116,139,0.2), 0 8px 24px rgba(100,116,139,0.15);
+}
+.profile-name   { font-size: 20px; font-weight: 800; color: white; }
+.profile-handle { font-family: 'Space Mono', monospace; font-size: 11px; color: #64748B; }
+.stats-strip    { display: flex; background: var(--surface); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.stat-cell      { flex: 1; padding: 12px 8px; display: flex; flex-direction: column; align-items: center; border-right: 1px solid var(--border); }
+.stat-cell:last-child { border-right: none; }
+.stat-n   { font-size: 22px; font-weight: 800; color: var(--text-1); line-height: 1; }
+.stat-l   { font-size: 9px; font-weight: 600; letter-spacing: 1px; color: var(--text-3); text-transform: uppercase; margin-top: 3px; }
+.row-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; background: var(--surface);
+  border-bottom: 1px solid var(--border); cursor: pointer;
+}
+.row-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0;
+}
+.row-label   { flex: 1; font-size: 14px; font-weight: 500; color: var(--text-1); }
+.row-chevron { font-size: 14px; color: var(--text-3); }
+
+/* ====================================
+   CAMERA / AR
+   ==================================== */
+.viewfinder {
+  flex: 1;
+  background: linear-gradient(180deg, #050D10 0%, #0A1A20 50%, #0F1F14 100%);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+}
+.ar-reticle    { width: 190px; height: 190px; position: relative; }
+.ar-corner     { position: absolute; width: 22px; height: 22px; border-color: rgba(255,255,255,0.65); border-style: solid; border-width: 0; }
+.ar-corner.tl  { top:0; left:0;  border-top-width:2px; border-left-width:2px;  border-radius:4px 0 0 0; }
+.ar-corner.tr  { top:0; right:0; border-top-width:2px; border-right-width:2px; border-radius:0 4px 0 0; }
+.ar-corner.bl  { bottom:0; left:0;  border-bottom-width:2px; border-left-width:2px;  border-radius:0 0 0 4px; }
+.ar-corner.br  { bottom:0; right:0; border-bottom-width:2px; border-right-width:2px; border-radius:0 0 4px 0; }
+.ar-scan-line  {
+  position: absolute; left: 4px; right: 4px; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  top: 50%; animation: scan 2.2s ease-in-out infinite;
+}
+@keyframes scan { 0% { transform:translateY(-85px); opacity:0; } 8% { opacity:1; } 92% { opacity:1; } 100% { transform:translateY(85px); opacity:0; } }
+
+.ar-label {
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  background: rgba(15,23,42,0.7); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 99px; padding: 4px 14px;
+  font-family: 'Space Mono', monospace; font-size: 8px;
+  color: rgba(255,255,255,0.65); letter-spacing: 3px; text-transform: uppercase; white-space: nowrap;
+}
+.catch-hint {
+  position: absolute; bottom: 128px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.catch-up    { font-size: 22px; color: rgba(255,255,255,0.45); animation: bup 1.6s ease-in-out infinite; }
+.catch-label { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+@keyframes bup { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
+.ar-detection {
+  position: absolute; bottom: 18px; left: 16px; right: 16px;
+  background: rgba(15,23,42,0.88); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.1); border-radius: 16px;
+  padding: 12px 16px; display: flex; align-items: center; gap: 12px;
+}
+.ar-d-left    { flex: 1; }
+.ar-d-name    { font-size: 16px; font-weight: 800; color: white; }
+.ar-d-species { font-family: 'Space Mono', monospace; font-style: italic; font-size: 9px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+.ar-d-chips   { display: flex; gap: 4px; margin-top: 6px; }
+.ar-d-right   { display: flex; flex-direction: column; align-items: flex-end; gap: 5px; }
+.ar-d-conf    { font-family: 'Space Mono', monospace; font-size: 9px; color: rgba(255,255,255,0.32); }
+
+.cam-controls {
+  height: 110px; background: var(--nav-dark);
+  display: flex; align-items: center; justify-content: space-around;
+  padding: 0 32px 12px; flex-shrink: 0;
+}
+.cam-btn      { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; color: rgba(255,255,255,0.55); cursor: pointer; }
+.shutter      { width: 72px; height: 72px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent-deep)); border: 3px solid rgba(255,255,255,0.18); box-shadow: 0 0 0 2px rgba(255,255,255,0.2), 0 8px 24px rgba(51,65,85,0.5); display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.shutter-inner{ width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #94A3B8, var(--accent)); border: 1px solid rgba(255,255,255,0.15); }
+
+/* ====================================
+   ANIMON DETAIL
+   ==================================== */
+.detail-hero {
+  position: relative; height: 210px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.detail-hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 70px; background: linear-gradient(to bottom, transparent, var(--surface));
+}
+.detail-emoji  { font-size: 80px; opacity: 0.3; filter: brightness(3.5); z-index: 1; }
+.back-btn {
+  position: absolute; top: 54px; left: 14px; z-index: 12;
+  background: rgba(15,23,42,0.6); border-radius: 99px;
+  padding: 6px 12px 6px 10px; display: flex; align-items: center; gap: 6px;
+}
+.back-arrow { color: white; font-size: 13px; }
+.back-lbl   { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.65); }
+.detail-body { background: var(--surface); flex: 1; }
+.detail-name-block { padding: 12px 20px 16px; border-bottom: 1px solid var(--border); }
+.detail-name    { font-size: 28px; font-weight: 800; color: var(--text-1); letter-spacing: -0.5px; }
+.detail-species { font-family: 'Space Mono', monospace; font-style: italic; font-size: 12px; color: var(--text-3); margin-top: 3px; }
+.detail-chips   { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; align-items: center; }
+.stat-grid     { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; padding: 0 20px; margin: 4px 0; }
+.stat-card-sm  { background: var(--bg); border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--border); }
+.stat-num-big  { font-family: 'Space Mono', monospace; font-size: 24px; font-weight: 700; color: var(--text-1); }
+.stat-lbl-sm   { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; color: var(--text-3); margin-top: 3px; }
+.detail-row    { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: var(--surface); border-top: 1px solid var(--border); }
+.detail-row-lbl{ font-family: 'Space Mono', monospace; font-size: 10px; color: var(--text-3); }
+.detail-row-val{ font-size: 13px; font-weight: 600; color: var(--text-1); }
+.trade-cta {
+  margin: 0 20px 20px;
+  background: var(--accent-soft);
+  border: 1.5px solid rgba(100,116,139,0.2);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+}
+.trade-cta-lbl { font-size: 14px; font-weight: 700; color: var(--accent); }
+.trade-cta-sub { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+
+/* ====================================
+   COMPONENT LIBRARY (bottom section)
+   ==================================== */
+.comp-lib {
+  margin-top: 72px;
+  padding: 48px 32px 60px;
+  background: #0B0F1C;
+  border-top: 1px solid #1E293B;
+}
+.cl-h  { font-size: 32px; font-weight: 800; color: white; margin-bottom: 6px; letter-spacing: -0.5px; }
+.cl-h span { color: var(--accent); }
+.cl-sub { font-size: 13px; color: #475569; margin-bottom: 48px; }
+.cl-section { margin-bottom: 52px; }
+.cl-seclbl  { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #475569; border-bottom: 1px solid #1E293B; padding-bottom: 8px; margin-bottom: 20px; }
+.cl-row     { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+.cl-item    { display: flex; flex-direction: column; gap: 8px; }
+.cl-lbl     { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 2px; color: #475569; text-transform: uppercase; }
+.spec-box   { background: #070A14; border: 1px solid #1E293B; border-radius: 6px; padding: 10px 14px; font-family: 'Space Mono', monospace; font-size: 8px; color: #64748B; line-height: 1.8; max-width: 220px; }
+.spec-box strong { color: var(--accent); }
+
+/* ====================================
+   ANSWERS / OPEN QUESTIONS SECTION
+   ==================================== */
+.qa-section { padding: 48px 32px 80px; background: #080C18; border-top: 1px solid #1E293B; }
+.qa-h       { font-size: 26px; font-weight: 800; color: white; margin-bottom: 6px; }
+.qa-sub     { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: #475569; text-transform: uppercase; margin-bottom: 28px; }
+.qa-list    { display: flex; flex-direction: column; gap: 10px; max-width: 680px; }
+.qa-item    { background: #0B0F1C; border: 1px solid #1E293B; border-radius: 10px; padding: 14px 16px; display: flex; gap: 12px; }
+.qa-icon    { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.qa-q       { font-size: 11px; font-weight: 700; color: #64748B; margin-bottom: 4px; }
+.qa-a       { font-size: 13px; color: white; line-height: 1.6; }
+.qa-open    { border-left: 2px solid var(--accent); }
+
+</style>
+</head>
+<body>
+
+<div class="version-tag">v3 — Clean Modern · Answered Directions</div>
+<h1 class="page-title">Anílog — <span>Design</span> Prototype</h1>
+<p class="page-sub">6 frames · redesigned from scratch · scroll right to see all screens · Component Library below</p>
+
+<!-- ============================================================
+     PHONE FRAMES
+     ============================================================ -->
+<div class="frames-row">
+
+  <!-- ===========================
+       FRAME 1 — SOCIAL DISCOVER
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen">
+
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <span class="status-icons">▲▲▲ ◈ ▌▌</span>
+        </div>
+
+        <div class="screen-header">
+          <div class="screen-title">Discover</div>
+          <div class="screen-subtitle">Social Feed · Nearby Sightings</div>
+        </div>
+
+        <div class="search-bar">
+          <span class="search-icon">⌕</span>
+          <span class="search-placeholder">Search animons, trainers…</span>
+        </div>
+
+        <div class="scroll-content">
+
+          <!-- Post 1 with embedded card -->
+          <div class="social-post">
+            <div class="post-header">
+              <div class="post-avatar" style="background:linear-gradient(135deg,#EF4444,#7F1D1D);">AK</div>
+              <div class="post-meta">
+                <div class="post-uname">@alex_king</div>
+                <div class="post-time">2 MIN AGO · HYDE PARK, LONDON</div>
+              </div>
+            </div>
+            <div class="post-text">Just caught a <strong>Pyrexis Vulpine</strong> near the south lake! First Glossy of the month 🔥 Took 4 attempts to land it.</div>
+            <!-- Embedded compact card -->
+            <div class="animon-card-compact" style="margin-bottom: 10px;">
+              <div class="compact-image grad-fire-psychic">
+                <span style="font-size:32px;opacity:0.22;filter:brightness(0) invert(1);">🦊</span>
+              </div>
+              <div class="compact-footer">
+                <div class="compact-name">Pyrexis Vulpine</div>
+                <div class="compact-chips">
+                  <span class="chip fire">Fire</span>
+                  <span class="chip psychic">Psychic</span>
+                  <span class="rarity-badge glossy" style="margin-left:auto;"><span class="glossy-text">Glossy</span></span>
+                </div>
+              </div>
+            </div>
+            <div class="post-actions">
+              <div class="post-action">♥ 14</div>
+              <div class="post-action">💬 3</div>
+              <div class="post-action trade">⇄ Offer Trade</div>
+            </div>
+          </div>
+
+          <!-- Post 2 — text only -->
+          <div class="social-post">
+            <div class="post-header">
+              <div class="post-avatar" style="background:linear-gradient(135deg,#3B82F6,#1E3A8A);">MR</div>
+              <div class="post-meta">
+                <div class="post-uname">@maya_r</div>
+                <div class="post-time">18 MIN AGO · RICHMOND</div>
+              </div>
+            </div>
+            <div class="post-text">New to Anílog! My <strong>Carapond Testudo</strong> has different shell markings to the one in the Logbook — are there sub-variants?</div>
+            <div class="post-actions">
+              <div class="post-action">♥ 7</div>
+              <div class="post-action">💬 5</div>
+            </div>
+          </div>
+
+          <div class="section-header"><span class="section-label">Nearby Sightings</span></div>
+
+          <!-- Horizontal compact cards -->
+          <div style="display:flex;gap:10px;padding:0 16px 14px;overflow-x:auto;scrollbar-width:none;">
+            <div class="animon-card-compact" style="width:116px;flex-shrink:0;">
+              <div class="compact-image grad-ground-steel">
+                <span style="font-size:26px;opacity:0.22;filter:brightness(0) invert(1);">🦔</span>
+              </div>
+              <div class="compact-footer">
+                <div class="compact-name">Ferric Mole</div>
+                <div class="compact-chips"><span class="chip ground">Ground</span><span class="chip steel">Steel</span></div>
+              </div>
+            </div>
+            <div class="animon-card-compact" style="width:116px;flex-shrink:0;">
+              <div class="compact-image grad-ice-dragon">
+                <span style="font-size:26px;opacity:0.22;filter:brightness(0) invert(1);">🐉</span>
+              </div>
+              <div class="compact-footer">
+                <div class="compact-name">Glacivern</div>
+                <div class="compact-chips"><span class="chip ice">Ice</span><span class="chip dragon">Dragon</span></div>
+              </div>
+            </div>
+            <div class="animon-card-compact" style="width:116px;flex-shrink:0;">
+              <div class="compact-image grad-bug-light">
+                <span style="font-size:26px;opacity:0.22;filter:brightness(0) invert(1);">🦋</span>
+              </div>
+              <div class="compact-footer">
+                <div class="compact-name">Aurelius Moth</div>
+                <div class="compact-chips"><span class="chip bug">Bug</span><span class="chip light">Light</span></div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Tab Bar with camera FAB -->
+        <div class="tab-bar">
+          <div class="tab-item active"><span class="tab-icon">⊞</span><span class="tab-dot"></span><span class="tab-label">Discover</span></div>
+          <div class="tab-item"><span class="tab-icon">◈</span><span class="tab-dot"></span><span class="tab-label">Anílog</span></div>
+          <div class="camera-fab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="tab-item"><span class="tab-icon">◎</span><span class="tab-dot"></span><span class="tab-label">Logbook</span></div>
+          <div class="tab-item"><span class="tab-icon">◐</span><span class="tab-dot"></span><span class="tab-label">Profile</span></div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">01 · Social Discover</span>
+  </div>
+
+  <!-- ===========================
+       FRAME 2 — MY COLLECTION
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen">
+
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <span class="status-icons">▲▲▲ ◈ ▌▌</span>
+        </div>
+
+        <div class="screen-header">
+          <div class="screen-title">My Anílog</div>
+          <div class="screen-subtitle">47 Specimens · 23 Species</div>
+        </div>
+
+        <!-- Filter pills -->
+        <div style="display:flex;gap:6px;padding:10px 16px 8px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--accent);color:white;white-space:nowrap;cursor:pointer;">All 47</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:rgba(245,158,11,0.1);color:#F59E0B;border:1px solid rgba(245,158,11,0.25);white-space:nowrap;cursor:pointer;">✦ Glossy 1</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Rare 3</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Uncommon 12</span>
+        </div>
+
+        <div class="scroll-content">
+          <div class="section-header"><span class="section-label">All Specimens</span></div>
+
+          <!-- FULL CARD 1 -->
+          <div class="animon-card-full">
+            <div class="card-image-area grad-fire-psychic">
+              <span class="card-placeholder">🦊</span>
+              <div class="card-rarity-pill"><span class="rarity-badge glossy"><span class="glossy-text">Glossy</span></span></div>
+            </div>
+            <div class="card-footer-strip">
+              <div class="footer-left">
+                <div class="card-name">Pyrexis Vulpine</div>
+                <div class="card-species">Pyrexis vulpine · "Ember Fox"</div>
+                <div class="footer-chips">
+                  <span class="chip fire">Fire</span>
+                  <span class="chip psychic">Psychic</span>
+                </div>
+              </div>
+              <div class="footer-right">
+                <span class="card-accession">ANL-00147</span>
+                <span class="card-region">Volcanic Rim</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FULL CARD 2 -->
+          <div class="animon-card-full">
+            <div class="card-image-area grad-rock-water">
+              <span class="card-placeholder">🐢</span>
+              <div class="card-rarity-pill"><span class="rarity-badge uncommon">Uncommon</span></div>
+            </div>
+            <div class="card-footer-strip">
+              <div class="footer-left">
+                <div class="card-name">Carapond Testudo</div>
+                <div class="card-species">Carapond testudo · "Mossbacked"</div>
+                <div class="footer-chips">
+                  <span class="chip rock">Rock</span>
+                  <span class="chip water">Water</span>
+                </div>
+              </div>
+              <div class="footer-right">
+                <span class="card-accession">ANL-00312</span>
+                <span class="card-region">Midland Fen</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- FULL CARD 3 -->
+          <div class="animon-card-full">
+            <div class="card-image-area grad-ice-dragon">
+              <span class="card-placeholder">🐲</span>
+              <div class="card-rarity-pill"><span class="rarity-badge rare">Rare</span></div>
+            </div>
+            <div class="card-footer-strip">
+              <div class="footer-left">
+                <div class="card-name">Glacivern</div>
+                <div class="card-species">Glacivern · "Frost Drake"</div>
+                <div class="footer-chips">
+                  <span class="chip ice">Ice</span>
+                  <span class="chip dragon">Dragon</span>
+                </div>
+              </div>
+              <div class="footer-right">
+                <span class="card-accession">ANL-00033</span>
+                <span class="card-region">Tundric Shelf</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab-item"><span class="tab-icon">⊞</span><span class="tab-dot"></span><span class="tab-label">Discover</span></div>
+          <div class="tab-item active"><span class="tab-icon">◈</span><span class="tab-dot"></span><span class="tab-label">Anílog</span></div>
+          <div class="camera-fab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="tab-item"><span class="tab-icon">◎</span><span class="tab-dot"></span><span class="tab-label">Logbook</span></div>
+          <div class="tab-item"><span class="tab-icon">◐</span><span class="tab-dot"></span><span class="tab-label">Profile</span></div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">02 · My Collection</span>
+  </div>
+
+  <!-- ===========================
+       FRAME 3 — Logbook (STAMPS) NEW
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen">
+
+        <div class="status-bar">
+          <span class="status-time">9:41</span>
+          <span class="status-icons">▲▲▲ ◈ ▌▌</span>
+        </div>
+
+        <div class="screen-header">
+          <div class="screen-title">Logbook</div>
+          <div class="screen-subtitle">23 / 142 Species Discovered</div>
+        </div>
+
+        <!-- Progress bar -->
+        <div style="padding:10px 16px 0;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+          <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:10px;">
+            <div style="width:16%;height:100%;background:var(--accent);border-radius:3px;"></div>
+          </div>
+        </div>
+
+        <!-- Category tabs -->
+        <div style="display:flex;gap:6px;padding:10px 16px 10px;overflow-x:auto;scrollbar-width:none;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0;">
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--accent);color:white;white-space:nowrap;cursor:pointer;">All</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Canine</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Reptile</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Avian</span>
+          <span style="font-size:10px;font-weight:700;padding:5px 12px;border-radius:99px;display:inline-flex;align-items:center;line-height:1;background:var(--surface);color:var(--text-3);border:1px solid var(--border);white-space:nowrap;cursor:pointer;">Insect</span>
+        </div>
+
+        <div class="scroll-content">
+          <div class="section-header"><span class="section-label">Canine · 3 / 12</span></div>
+          <div class="Logbook-grid">
+            <div class="Logbook-entry">
+              <div class="Logbook-img grad-fire-psychic">🦊</div>
+              <div class="Logbook-stamp">3</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">Pyrexis Vulpine</div></div>
+            </div>
+            <div class="Logbook-entry">
+              <div class="Logbook-img" style="background:linear-gradient(140deg,#1E3A8A,#0C4A6E);">🐺</div>
+              <div class="Logbook-stamp">1</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">Aqua Fenris</div></div>
+            </div>
+            <div class="Logbook-entry">
+              <div class="Logbook-img" style="background:linear-gradient(140deg,#052E16,#1A2E05);">🦮</div>
+              <div class="Logbook-stamp">7</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">Mosscoat Hound</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🐶</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🐶</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🐶</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+          </div>
+
+          <div class="section-header"><span class="section-label">Reptile · 2 / 18</span></div>
+          <div class="Logbook-grid">
+            <div class="Logbook-entry">
+              <div class="Logbook-img grad-rock-water">🐢</div>
+              <div class="Logbook-stamp">2</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">Carapond Testudo</div></div>
+            </div>
+            <div class="Logbook-entry">
+              <div class="Logbook-img grad-ice-dragon">🐉</div>
+              <div class="Logbook-stamp">1</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">Glacivern</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🦎</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🦎</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🐍</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+            <div class="Logbook-entry uncaptured">
+              <div class="Logbook-img grad-empty">🐊</div>
+              <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab-item"><span class="tab-icon">⊞</span><span class="tab-dot"></span><span class="tab-label">Discover</span></div>
+          <div class="tab-item"><span class="tab-icon">◈</span><span class="tab-dot"></span><span class="tab-label">Anílog</span></div>
+          <div class="camera-fab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="tab-item active"><span class="tab-icon">◎</span><span class="tab-dot"></span><span class="tab-label">Logbook</span></div>
+          <div class="tab-item"><span class="tab-icon">◐</span><span class="tab-dot"></span><span class="tab-label">Profile</span></div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">03 · Logbook (Stamps) — NEW</span>
+  </div>
+
+  <!-- ===========================
+       FRAME 4 — PROFILE
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen">
+
+        <div class="status-bar dark">
+          <span class="status-time light">9:41</span>
+          <span class="status-icons light">▲▲▲ ◈ ▌▌</span>
+        </div>
+
+        <div class="profile-hero">
+          <div class="profile-avatar">JH</div>
+          <div class="profile-name">James Harton</div>
+          <div class="profile-handle">@tokydon · member since March 2025</div>
+          <div style="display:flex;gap:6px;margin-top:4px;">
+            <span class="rarity-badge uncommon">Senior Curator</span>
+            <span class="rarity-badge rare">47 / 50 to Master</span>
+          </div>
+        </div>
+
+        <div class="stats-strip">
+          <div class="stat-cell"><span class="stat-n">47</span><span class="stat-l">Logged</span></div>
+          <div class="stat-cell"><span class="stat-n">23</span><span class="stat-l">Species</span></div>
+          <div class="stat-cell"><span class="stat-n">3</span><span class="stat-l">Trades</span></div>
+          <div class="stat-cell"><span class="stat-n" style="font-size:18px;">✦ 1</span><span class="stat-l">Glossy</span></div>
+        </div>
+
+        <div class="scroll-content">
+          <div class="section-header"><span class="section-label">Rarest Capture</span></div>
+          <div class="animon-card-full" style="height:180px;">
+            <div class="card-image-area grad-fire-psychic" style="min-height:120px;">
+              <span class="card-placeholder" style="font-size:40px;">🦊</span>
+              <div class="card-rarity-pill"><span class="rarity-badge glossy"><span class="glossy-text">Glossy</span></span></div>
+            </div>
+            <div class="card-footer-strip">
+              <div class="footer-left">
+                <div class="card-name">Pyrexis Vulpine</div>
+                <div class="footer-chips"><span class="chip fire">Fire</span><span class="chip psychic">Psychic</span></div>
+              </div>
+              <div class="footer-right"><span class="card-accession">ANL-00147</span></div>
+            </div>
+          </div>
+
+          <div class="section-header"><span class="section-label">Account</span></div>
+          <div class="row-item"><div class="row-icon" style="background:#EEF2FF;">🔔</div><span class="row-label">Notifications</span><span class="row-chevron">›</span></div>
+          <div class="row-item"><div class="row-icon" style="background:#F0FDF4;">🔒</div><span class="row-label">Privacy</span><span class="row-chevron">›</span></div>
+          <div class="row-item"><div class="row-icon" style="background:rgba(100,116,139,0.08);">⇄</div><span class="row-label">Trade History</span><span class="row-chevron">›</span></div>
+          <div class="row-item"><div class="row-icon" style="background:#FFF7ED;">🏆</div><span class="row-label">Milestones</span><span class="row-chevron">›</span></div>
+          <div class="row-item"><div class="row-icon" style="background:#F0F9FF;">ℹ</div><span class="row-label">About Anílog</span><span class="row-chevron">›</span></div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab-item"><span class="tab-icon">⊞</span><span class="tab-dot"></span><span class="tab-label">Discover</span></div>
+          <div class="tab-item"><span class="tab-icon">◈</span><span class="tab-dot"></span><span class="tab-label">Anílog</span></div>
+          <div class="camera-fab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="tab-item"><span class="tab-icon">◎</span><span class="tab-dot"></span><span class="tab-label">Logbook</span></div>
+          <div class="tab-item active"><span class="tab-icon">◐</span><span class="tab-dot"></span><span class="tab-label">Profile</span></div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">04 · Profile</span>
+  </div>
+
+  <!-- ===========================
+       FRAME 5 — CAMERA / AR
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen" style="background:#000;">
+
+        <div class="status-bar dark">
+          <span class="status-time light">9:41</span>
+          <span class="status-icons light">▲▲▲ ◈ ▌▌</span>
+        </div>
+
+        <div class="viewfinder">
+          <div class="ar-label">AR Scanning · Detecting Animons</div>
+          <div class="ar-reticle">
+            <div class="ar-corner tl"></div>
+            <div class="ar-corner tr"></div>
+            <div class="ar-corner bl"></div>
+            <div class="ar-corner br"></div>
+            <div class="ar-scan-line"></div>
+          </div>
+          <div class="catch-hint">
+            <div class="catch-up">↑</div>
+            <div class="catch-label">Swipe up to catch</div>
+          </div>
+          <div class="ar-detection">
+            <div class="ar-d-left">
+              <div class="ar-d-name">Pyrexis Vulpine</div>
+              <div class="ar-d-species">Pyrexis vulpine · "Ember Fox"</div>
+              <div class="ar-d-chips">
+                <span class="chip fire">Fire</span>
+                <span class="chip psychic">Psychic</span>
+              </div>
+            </div>
+            <div class="ar-d-right">
+              <span class="rarity-badge glossy"><span class="glossy-text">Glossy!</span></span>
+              <div class="ar-d-conf">97% match</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cam-controls">
+          <div class="cam-btn">⚡</div>
+          <div class="shutter"><div class="shutter-inner"></div></div>
+          <div class="cam-btn">🔄</div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">05 · Camera / AR Scan</span>
+  </div>
+
+  <!-- ===========================
+       FRAME 6 — ANIMON DETAIL
+       =========================== -->
+  <div class="frame-wrapper">
+    <div class="phone-frame">
+      <div class="screen" style="background:var(--surface);">
+
+        <div class="detail-hero grad-fire-psychic">
+          <div class="status-bar transparent">
+            <span class="status-time light">9:41</span>
+            <span class="status-icons light">▲▲▲ ◈ ▌▌</span>
+          </div>
+          <div class="detail-emoji">🦊</div>
+          <div class="back-btn">
+            <span class="back-arrow">←</span>
+            <span class="back-lbl">Back</span>
+          </div>
+        </div>
+
+        <div class="scroll-content" style="background:var(--surface);">
+
+          <!-- Art / Photo toggle -->
+          <div style="display:flex;gap:3px;background:var(--bg);border-radius:99px;padding:3px;margin:12px 20px 8px;border:1px solid var(--border);width:fit-content;">
+            <div style="padding:5px 14px;background:var(--surface);border-radius:99px;display:inline-flex;align-items:center;line-height:1;font-size:10px;font-weight:700;color:var(--text-1);box-shadow:0 1px 3px rgba(0,0,0,0.08);">&#x2726; AI Art</div>
+            <div style="padding:5px 14px;border-radius:99px;font-size:10px;font-weight:600;color:var(--text-3);">&#128247; My Photo</div>
+          </div>
+
+          <div class="detail-name-block">
+            <div class="detail-name">Pyrexis Vulpine</div>
+            <div class="detail-species">Pyrexis vulpine · "Ember Fox"</div>
+            <div class="detail-chips">
+              <span class="chip fire">Fire</span>
+              <span class="chip psychic">Psychic</span>
+              <span class="rarity-badge glossy" style="margin-left:4px;"><span class="glossy-text">Glossy</span></span>
+            </div>
+          </div>
+
+          <div class="section-header"><span class="section-label">Field Observations</span></div>
+          <div class="stat-grid">
+            <div class="stat-card-sm"><div class="stat-num-big">74</div><div class="stat-lbl-sm">Attack</div></div>
+            <div class="stat-card-sm"><div class="stat-num-big">45</div><div class="stat-lbl-sm">Defence</div></div>
+            <div class="stat-card-sm"><div class="stat-num-big">92</div><div class="stat-lbl-sm">Speed</div></div>
+            <div class="stat-card-sm"><div class="stat-num-big">88</div><div class="stat-lbl-sm">Stealth</div></div>
+          </div>
+
+          <div class="detail-row"><span class="detail-row-lbl">Accession #</span><span class="detail-row-val">ANL-00147</span></div>
+          <div class="detail-row"><span class="detail-row-lbl">Habitat</span><span class="detail-row-val">Volcanic Rim</span></div>
+          <div class="detail-row"><span class="detail-row-lbl">Logged</span><span class="detail-row-val">Feb 12, 2026</span></div>
+
+          <div class="section-header"><span class="section-label">Log Entry</span></div>
+          <div style="padding:4px 20px 16px;">
+            <p style="font-size:13px;color:var(--text-2);line-height:1.65;">Observed near the eastern fumarole field. Distinctive ember-orange dorsal markings. Unusual iridescence on the tail confirmed Glossy classification on third capture attempt.</p>
+          </div>
+
+          <div class="trade-cta">
+            <div>
+              <div class="trade-cta-lbl">⇄ Offer for Trade</div>
+              <div class="trade-cta-sub">Let other players make offers</div>
+            </div>
+            <span style="font-size:18px;color:var(--accent);">›</span>
+          </div>
+
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab-item"><span class="tab-icon">⊞</span><span class="tab-dot"></span><span class="tab-label">Discover</span></div>
+          <div class="tab-item active"><span class="tab-icon">◈</span><span class="tab-dot"></span><span class="tab-label">Anílog</span></div>
+          <div class="camera-fab"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+          <div class="tab-item"><span class="tab-icon">◎</span><span class="tab-dot"></span><span class="tab-label">Logbook</span></div>
+          <div class="tab-item"><span class="tab-icon">◐</span><span class="tab-dot"></span><span class="tab-label">Profile</span></div>
+        </div>
+
+      </div>
+    </div>
+    <span class="frame-label">06 · Animon Detail</span>
+  </div>
+
+</div><!-- /frames-row -->
+
+
+<!-- ============================================================
+     COMPONENT LIBRARY
+     ============================================================ -->
+<div class="comp-lib">
+  <h2 class="cl-h">Component <span>Library</span></h2>
+  <p class="cl-sub">Reusable primitives — for each component: typed Props interface, tokens only (no hardcoded hex), exported from src/components/ui/index.ts</p>
+
+  <!-- AnimonCard -->
+  <div class="cl-section">
+    <div class="cl-seclbl">AnimonCard — Full &amp; Compact</div>
+    <div class="cl-row">
+      <!-- Full -->
+      <!-- COMPONENT: AnimonCard (full)
+           Props: name, species, accession, type[], rarity, region, gradientClass, capturePhoto?
+           Tokens: --surface (face), type gradient (image), --nav-dark (footer strip)
+           SIGNATURE: The dark footer strip with vivid chips is Anílog's visual identity.
+           Variant full = 220px default, compact = 140px -->
+      <div class="cl-item">
+        <span class="cl-lbl">Full · 220px</span>
+        <div class="animon-card-full" style="margin:0;width:196px;height:190px;">
+          <div class="card-image-area grad-bug-light" style="min-height:110px;">
+            <span class="card-placeholder" style="font-size:36px;">🦋</span>
+            <div class="card-rarity-pill"><span class="rarity-badge rare">Rare</span></div>
+          </div>
+          <div class="card-footer-strip">
+            <div class="footer-left">
+              <div class="card-name">Aurelius Moth</div>
+              <div class="card-species">A. moth · "Gilded Night Moth"</div>
+              <div class="footer-chips"><span class="chip bug">Bug</span><span class="chip light">Light</span></div>
+            </div>
+            <div class="footer-right">
+              <span class="card-accession">ANL-00089</span>
+              <span class="card-region">Boreal Canopy</span>
+            </div>
+          </div>
+        </div>
+        <div class="spec-box">
+          <strong>Props:</strong> name, species, accession<br>type[], rarity, region, gradientClass<br>capturePhoto? (uri)<br><br>
+          <strong>Tokens:</strong> --surface · gradient (img)<br>--nav-dark (footer) · --text-inv
+        </div>
+      </div>
+
+      <!-- Compact -->
+      <!-- COMPONENT: AnimonCard (compact)
+           Props: name, type[], gradientClass, rarity, variant="compact"
+           Tokens: gradient, --nav-dark (footer) -->
+      <div class="cl-item">
+        <span class="cl-lbl">Compact · 150px</span>
+        <div class="animon-card-compact" style="width:136px;">
+          <div class="compact-image grad-ground-steel">
+            <span style="font-size:28px;opacity:0.22;filter:brightness(0) invert(1);">🦔</span>
+          </div>
+          <div class="compact-footer">
+            <div class="compact-name">Ferric Mole</div>
+            <div class="compact-chips"><span class="chip ground">Ground</span><span class="chip steel">Steel</span></div>
+          </div>
+        </div>
+        <div class="spec-box">
+          <strong>Props:</strong> name, type[]<br>gradientClass, rarity<br>variant="compact"
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RarityBadge -->
+  <div class="cl-section">
+    <div class="cl-seclbl">RarityBadge — 4 Variants</div>
+    <!-- COMPONENT: RarityBadge
+         Props: rarity = "common" | "uncommon" | "rare" | "glossy"
+         Tokens: rarity-specific (--r-common/uncommon/rare), animated gradient for glossy
+         Notes: Dot + label. Glossy uses animated CSS gradient — no hardcoded hex. -->
+    <div class="cl-row">
+      <div class="cl-item"><span class="cl-lbl">Common</span><span class="rarity-badge common">Common</span><div class="spec-box"><strong>Token:</strong> --r-common<br>#94A3B8</div></div>
+      <div class="cl-item"><span class="cl-lbl">Uncommon</span><span class="rarity-badge uncommon">Uncommon</span><div class="spec-box"><strong>Token:</strong> --r-uncommon<br>#22C55E</div></div>
+      <div class="cl-item"><span class="cl-lbl">Rare</span><span class="rarity-badge rare">Rare</span><div class="spec-box"><strong>Token:</strong> --r-rare = --accent<br>#6366F1</div></div>
+      <div class="cl-item"><span class="cl-lbl">Glossy ✦ animated</span><span class="rarity-badge glossy"><span class="glossy-text">Glossy</span></span><div class="spec-box"><strong>Animation:</strong> amber→pink→indigo<br>gradient text + dot pulse</div></div>
+    </div>
+  </div>
+
+  <!-- Type Chips -->
+  <div class="cl-section">
+    <div class="cl-seclbl">TypeTagChip — All 12 Types</div>
+    <!-- COMPONENT: TypeTagChip
+         Props: type = "fire"|"water"|"grass"|"electric"|"ice"|"dragon"|"psychic"|"bug"|"steel"|"ground"|"rock"|"light"
+         Tokens: --t-{type} backgrounds. White text except electric/bug/light = dark text.
+         Design note: Chips are the PRIMARY, intentional source of colour in the UI.
+                      They live on the dark card footer — maximum contrast pop. -->
+    <div class="cl-row" style="flex-wrap:wrap;gap:8px;">
+      <span class="chip fire">Fire</span>
+      <span class="chip water">Water</span>
+      <span class="chip grass">Grass</span>
+      <span class="chip electric">Electric</span>
+      <span class="chip ice">Ice</span>
+      <span class="chip dragon">Dragon</span>
+      <span class="chip psychic">Psychic</span>
+      <span class="chip bug">Bug</span>
+      <span class="chip steel">Steel</span>
+      <span class="chip ground">Ground</span>
+      <span class="chip rock">Rock</span>
+      <span class="chip light">Light</span>
+    </div>
+    <div class="spec-box" style="margin-top:12px;max-width:480px;">
+      <strong>Design intent:</strong> The token colours here ARE the colour palette of Anílog.<br>
+      App chrome stays neutral. All colour comes from the creature types + rarity.<br>
+      Card image areas use type-derived gradient as the visual preview until photo/AI art loads.
+    </div>
+  </div>
+
+  <!-- LogbookEntry -->
+  <div class="cl-section">
+    <div class="cl-seclbl">LogbookEntry — Captured vs Uncaptured</div>
+    <!-- COMPONENT: LogbookEntry
+         Props: name, species, captureCount, captured=boolean, gradientClass
+         Tokens: gradient (captured), --nav-dark (label), --accent (stamp)
+         Notes: filter: grayscale(1) opacity(0.35) on uncaptured. Name = "???" until first capture.
+                Stamp badge shows total captures of that species. -->
+    <div class="cl-row">
+      <div class="cl-item">
+        <span class="cl-lbl">Captured · 3×</span>
+        <div class="Logbook-entry" style="width:96px;">
+          <div class="Logbook-img grad-fire-psychic">🦊</div>
+          <div class="Logbook-stamp">3</div>
+          <div class="Logbook-lbl"><div class="Logbook-name">Pyrexis Vulpine</div></div>
+        </div>
+      </div>
+      <div class="cl-item">
+        <span class="cl-lbl">Not Captured</span>
+        <div class="Logbook-entry uncaptured" style="width:96px;">
+          <div class="Logbook-img grad-empty">🐶</div>
+          <div class="Logbook-lbl"><div class="Logbook-name">???</div></div>
+        </div>
+      </div>
+      <div class="spec-box" style="align-self:center;">
+        <strong>Stamp =</strong> capture count<br>
+        <strong>???</strong> = hidden until caught<br>
+        <strong>Greyscale</strong> via CSS filter
+      </div>
+    </div>
+  </div>
+
+  <!-- SocialPost -->
+  <div class="cl-section">
+    <div class="cl-seclbl">SocialPost</div>
+    <!-- COMPONENT: SocialPost
+         Props: user{name, handle, avatarGradient}, time, location?, text, embeddedCard?, likeCount, commentCount, showTrade=bool
+         Tokens: --surface, --border, --text-1/2/3, --accent (trade CTA)
+         Notes: Trade CTA only shown if the viewing user has an eligible trade. -->
+    <div style="background:var(--surface);width:330px;border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+      <div class="social-post" style="border-bottom:none;">
+        <div class="post-header">
+          <div class="post-avatar" style="background:linear-gradient(135deg,#EF4444,#7F1D1D);">AK</div>
+          <div class="post-meta">
+            <div class="post-uname">@alex_king</div>
+            <div class="post-time">2 MIN AGO · LONDON</div>
+          </div>
+        </div>
+        <div class="post-text">Just caught a <strong>Pyrexis Vulpine</strong> — first Glossy!</div>
+        <div class="post-actions">
+          <div class="post-action">♥ 14</div>
+          <div class="post-action">💬 3</div>
+          <div class="post-action trade">⇄ Offer Trade</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /comp-lib -->
+
+
+<!-- ============================================================
+     DESIGN DECISIONS Q&A
+     ============================================================ -->
+<div class="qa-section">
+  <h2 class="qa-h">Design Directions — Answered</h2>
+  <p class="qa-sub">Owner's input · March 5, 2026 · Reflected in this prototype</p>
+
+  <div class="qa-list">
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">CORE DIRECTION — Visual Reset</div>
+        <div class="qa-a">Full pivot from naturalist skeuomorphic to clean modern digital. White/neutral base, cool grey background (#F1F4F9), clean white cards. ALL colour from type chips + rarity badges + card image gradients. New font: Plus Jakarta Sans (modern, friendly) + Space Mono (data). The dark card footer strip is preserved — evolved as the Anílog signature, now clean digital instead of parchment.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q1 — Animal Image Treatment</div>
+        <div class="qa-a">Two modes: (A) cropped face photo from user's camera capture, (B) AI-generated Pokémon-style illustration per species. Card prototype uses type-derived gradient as the placeholder — this also serves as the fallback when neither is available.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q2 — Tab Icons + Camera Entry</div>
+        <div class="qa-a">Unicode icons kept for now. Camera FAB (floating action button, indigo gradient) added in the tab bar centre — elevated above the bar, clearly the primary action. The camera was previously invisible — this solves it.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q3 — Camera + Catching Mechanic</div>
+        <div class="qa-a">AR scanning: user points camera at real animal → AI identifies species, type, breed, rarity. Detection overlay shows name, species label, type chips, rarity, confidence %. Catching mechanic: swipe-up gesture (shown in prototype as animated arrow + label). Glossy detection shown visually on the overlay. Full catching animation (throw mechanic) is a V2 feature.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q4 — Stamps &amp; Logbook Screen</div>
+        <div class="qa-a">New Logbook tab replaces Milestones in the main nav. 3-column grid, filtered by animal family (Canine, Reptile, Avian, Insect, etc.). Captured = full colour image + stamp count badge. Not captured = greyscale + "???". Stamp number = total catches of that species. Completion progress bar at top. Milestones moved to Profile → Milestones row item.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q5 — Social Feed + Trading</div>
+        <div class="qa-a">Discover = social feed (posts with optional embedded cards) + nearby sightings as horizontal scroll. Trading visible on: post cards ("Offer Trade"), Animon Detail page ("Offer for Trade" CTA), Profile ("Trade History" row). Full trade flow TBD — see Q8 below.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q6 — Brand Accent Colour</div>
+        <div class="qa-a">Grey. UI chrome (active tabs, FABs, stamps, progress, trade CTAs) uses slate-500 (#64748B) and slate-700 (#334155). This means the UI completely steps back and everything that pops is game content — type chips, rarity badges, card image gradients. No colour in the chrome means no favouritism toward any animal type.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q7 — Trade Flow Model</div>
+        <div class="qa-a">V1 Trade: request directly from a post on the Discover feed ("Offer Trade" button). The receiving user gets a notification and can accept/decline. Full async offer board is a V2 feature. Also confirmed: "Bestiary" renamed to "Logbook" throughout — and the ??? hidden names are intentionally retained as a discovery mechanic.</div>
+      </div>
+    </div>
+
+    <div class="qa-item">
+      <div class="qa-icon">✅</div>
+      <div>
+        <div class="qa-q">Q8 — AI Image Flow</div>
+        <div class="qa-a">Option C confirmed. Flow: (1) user takes photo, (2) capture animation plays — stamped into the Logbook, (3) AI illustration is generated and shown as the primary card art. On Animon Detail, a toggle pill lets the user switch between "✦ AI Art" and "📷 My Photo". Cards consistently display AI art in the collection, preserving a unified aesthetic. Photo remains in the log entry as field data.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

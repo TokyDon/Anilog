@@ -87,7 +87,7 @@ export default function DiscoverScreen() {
               key={item.id}
               style={[
                 styles.activityItem,
-                { borderLeftColor: colors.rarity[item.rarity as AnimonRarity] ?? colors.inkRule },
+                { borderLeftColor: colors.rarity[item.rarity as AnimonRarity] ?? colors.border },
               ]}
             >
               <Text style={styles.activityMessage}>{item.message}</Text>
@@ -139,12 +139,12 @@ const GRID_ITEM_WIDTH =
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.deviceBody,
+    backgroundColor: colors.bg,
   },
 
-  // Dark forestFloor header
+  // Dark header
   header: {
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     paddingHorizontal: 20,
     paddingVertical: 16,
     flexDirection: 'row',
@@ -154,33 +154,32 @@ const styles = StyleSheet.create({
   wordmark: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
-    color: colors.amberGlow,
+    color: colors.text3,
     letterSpacing: 4,
     textTransform: 'uppercase',
   },
   screenTitle: {
-    fontFamily: typography.fontFamily.heading,
-    fontStyle: 'italic',
+    fontFamily: typography.fontFamily.bodySemiBold,
     fontSize: typography.fontSize['3xl'],
-    color: colors.inkInverse,
-    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.heading,
+    color: colors.textInverse,
+    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
   },
   headerDate: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.amberResin,
+    color: colors.accentDeep,
     textAlign: 'right',
   },
 
-  scroll: { flex: 1, backgroundColor: colors.specimenCream },
+  scroll: { flex: 1, backgroundColor: colors.bg },
   scrollContent: { paddingBottom: 32 },
 
   // Stat chips
   statRow: {
     flexDirection: 'row',
-    backgroundColor: colors.parchment,
+    backgroundColor: colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: colors.inkRule,
+    borderBottomColor: colors.border,
     paddingVertical: 12,
     paddingHorizontal: 16,
     gap: 0,
@@ -193,18 +192,18 @@ const styles = StyleSheet.create({
   },
   statSymbol: {
     fontSize: typography.fontSize.lg,
-    color: colors.inkBrown,
+    color: colors.text2,
   },
   statValue: {
     fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.md,
-    color: colors.inkBlack,
+    color: colors.text1,
     lineHeight: typography.fontSize.md * typography.lineHeight.label,
   },
   statLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 9,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: typography.letterSpacing.label,
   },
 
@@ -220,21 +219,21 @@ const styles = StyleSheet.create({
   sectionRuleLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 10,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: typography.letterSpacing.widest,
   },
   sectionRuleLine: {
     flex: 1,
     height: 1,
-    backgroundColor: colors.inkRule,
+    backgroundColor: colors.border,
   },
 
   // Activity panel
   activityPanel: {
     marginHorizontal: 16,
-    backgroundColor: colors.parchment,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     borderRadius: 3,
     overflow: 'hidden',
   },
@@ -242,16 +241,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: colors.inkRule,
+    borderBottomColor: colors.border,
     borderLeftWidth: 2,
     // borderLeftColor set inline per item (rarity colour)
     gap: 4,
   },
   activityMessage: {
-    fontFamily: typography.fontFamily.heading,
-    fontStyle: 'italic',
+    fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.base,
-    color: colors.inkBlack,
+    color: colors.text1,
     lineHeight: typography.fontSize.base * typography.lineHeight.normal,
   },
   activityMeta: {
@@ -262,12 +260,12 @@ const styles = StyleSheet.create({
   activityRegion: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkFaded,
+    color: colors.text3,
   },
   activityAgo: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkFaded,
+    color: colors.text3,
   },
 
   // Recent carousel

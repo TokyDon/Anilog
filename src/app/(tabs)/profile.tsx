@@ -57,7 +57,7 @@ export default function ProfileScreen() {
           <View
             style={[
               styles.heroOverlay,
-              { backgroundColor: 'rgba(17,34,14,0.55)' },
+              { backgroundColor: colors.overlayDark },
             ]}
           />
           {/* Avatar */}
@@ -139,7 +139,7 @@ export default function ProfileScreen() {
         {/* ── Anílog+ banner ─────────────────────────────────────── */}
         <View style={styles.bannerWrap}>
           <LinearGradient
-            colors={['#163D2C', '#1B4332', '#163D2C']}
+            colors={[colors.navDark, colors.bezel, colors.navDark]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
             style={styles.upgradeBanner}
@@ -165,14 +165,14 @@ export default function ProfileScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.specimenCream,
+    backgroundColor: colors.bg,
   },
   scrollContent: { paddingBottom: 16 },
 
   // Hero zone
   heroZone: {
     height: 210,
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 24,
@@ -187,11 +187,11 @@ const styles = StyleSheet.create({
     height: 84,
     borderRadius: 42,
     borderWidth: 3,
-    borderColor: colors.amberGlow,
+    borderColor: colors.borderStrong,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    shadowColor: colors.amberGlow,
+    shadowColor: colors.borderStrong,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.55,
     shadowRadius: 8,
@@ -201,24 +201,24 @@ const styles = StyleSheet.create({
     width: 74,
     height: 74,
     borderRadius: 37,
-    backgroundColor: colors.deviceBezel,
+    backgroundColor: colors.bezel,
     alignItems: 'center',
     justifyContent: 'center',
   },
   avatarInitials: {
-    fontFamily: typography.fontFamily.headingBold,
+    fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.xl,
-    color: colors.inkAmber,
+    color: colors.accent,
   },
   username: {
-    fontFamily: typography.fontFamily.headingBlack,
+    fontFamily: typography.fontFamily.bodyExtra,
     fontSize: typography.fontSize['2xl'],
-    color: colors.inkInverse,
+    color: colors.textInverse,
   },
   memberSince: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 11,
-    color: 'rgba(245,240,232,0.60)',
+    color: 'rgba(255,255,255,0.55)',
     marginTop: 4,
     letterSpacing: 1,
   },
@@ -226,14 +226,14 @@ const styles = StyleSheet.create({
   // Stat strip
   statStrip: {
     flexDirection: 'row',
-    backgroundColor: colors.cardStock,
+    backgroundColor: colors.surface2,
     marginHorizontal: 20,
     marginTop: -1,
     borderRadius: 3,
     borderWidth: 1,
-    borderColor: colors.inkRule,
+    borderColor: colors.border,
     borderBottomWidth: 1,
-    borderBottomColor: colors.inkRule,
+    borderBottomColor: colors.border,
     marginBottom: 24,
   },
   statPanel: {
@@ -243,19 +243,19 @@ const styles = StyleSheet.create({
   },
   statDivider: {
     width: 1,
-    backgroundColor: colors.inkRule,
+    backgroundColor: colors.border,
     marginVertical: 10,
   },
   statValue: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: typography.fontSize['2xl'],
-    color: colors.inkBlack,
+    color: colors.text1,
     lineHeight: typography.fontSize['2xl'] * 1.1,
   },
   statLabel: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 10,
-    color: colors.inkFaded,
+    color: colors.text3,
     marginTop: 4,
     letterSpacing: 1.5,
   },
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontFamily: typography.fontFamily.bodyMedium,
     fontSize: typography.fontSize.xs,
-    color: colors.inkFaded,
+    color: colors.text3,
     letterSpacing: 2,
     textTransform: 'uppercase',
   },
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
   rarityLegendText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 10,
-    color: colors.inkBrown,
+    color: colors.text2,
     letterSpacing: 0.8,
   },
 
@@ -331,8 +331,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
     borderWidth: 1.5,
-    borderColor: colors.instrumentBrass,
-    shadowColor: colors.amberGlow,
+    borderColor: colors.borderStrong,
+    shadowColor: colors.text3,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.30,
     shadowRadius: 8,
@@ -340,18 +340,18 @@ const styles = StyleSheet.create({
   },
   upgradeText: { flex: 1, gap: 3 },
   upgradeTitle: {
-    fontFamily: typography.fontFamily.headingBold,
+    fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.lg,
-    color: colors.inkInverse,
+    color: colors.textInverse,
   },
   upgradeSub: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: 'rgba(245,240,232,0.75)',
+    color: 'rgba(255,255,255,0.65)',
     lineHeight: typography.fontSize.sm * 1.5,
   },
   upgradeBtn: {
-    backgroundColor: colors.amberResin,
+    backgroundColor: colors.accentDeep,
     borderRadius: 3,
     paddingHorizontal: 16,
     paddingVertical: 10,
@@ -359,7 +359,7 @@ const styles = StyleSheet.create({
   upgradeBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.inkInverse,
+    color: colors.textInverse,
     letterSpacing: 1,
   },
 });

@@ -99,7 +99,7 @@ export default function AnilogScreen() {
                 style={[
                   styles.filterChipText,
                   isActive
-                    ? { color: typeColor ?? colors.inkBlack }
+                    ? { color: typeColor ?? colors.text1 }
                     : styles.filterChipTextInactive,
                 ]}
               >
@@ -140,12 +140,12 @@ export default function AnilogScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.deviceBody,
+    backgroundColor: colors.bg,
   },
 
   // Dark forestFloor header â€” mirrors Discover screen
   header: {
-    backgroundColor: colors.forestFloor,
+    backgroundColor: colors.navDark,
     paddingHorizontal: SIDE_PAD,
     paddingVertical: 16,
     flexDirection: 'row',
@@ -155,20 +155,19 @@ const styles = StyleSheet.create({
   wordmark: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
-    color: colors.amberGlow,
+    color: colors.text3,
     letterSpacing: 4,
     textTransform: 'uppercase',
   },
   screenTitle: {
-    fontFamily: typography.fontFamily.heading,
-    fontStyle: 'italic',
+    fontFamily: typography.fontFamily.bodySemiBold,
     fontSize: typography.fontSize['3xl'],
-    color: colors.inkInverse,
-    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.heading,
+    color: colors.textInverse,
+    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
   },
   specimenBadge: {
     borderWidth: 1,
-    borderColor: colors.instrumentBrass,
+    borderColor: colors.borderStrong,
     borderRadius: 3,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -176,15 +175,15 @@ const styles = StyleSheet.create({
   specimenBadgeText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.inkAmber,
+    color: colors.accent,
     letterSpacing: typography.letterSpacing.label,
   },
 
   // Filter bar
   filterScroll: {
-    backgroundColor: colors.specimenCream,
+    backgroundColor: colors.bg,
     borderBottomWidth: 1,
-    borderBottomColor: colors.inkRule,
+    borderBottomColor: colors.border,
     maxHeight: 52,
   },
   filterRow: {
@@ -200,12 +199,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   filterChipInactive: {
-    backgroundColor: colors.parchment,
-    borderColor: colors.inkRule,
+    backgroundColor: colors.surface,
+    borderColor: colors.border,
   },
   filterChipActive: {
-    backgroundColor: colors.insetPanel,
-    borderColor: colors.inkBlack,
+    backgroundColor: colors.surface2,
+    borderColor: colors.text1,
   },
   filterChipText: {
     fontFamily: typography.fontFamily.bodyMedium,
@@ -213,12 +212,12 @@ const styles = StyleSheet.create({
     letterSpacing: typography.letterSpacing.label,
   },
   filterChipTextInactive: {
-    color: colors.inkBrown,
+    color: colors.text2,
   },
 
   // Grid
   grid: {
-    backgroundColor: colors.specimenCream,
+    backgroundColor: colors.bg,
     paddingHorizontal: SIDE_PAD,
     paddingTop: 12,
     paddingBottom: 24,

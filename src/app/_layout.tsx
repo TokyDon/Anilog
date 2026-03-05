@@ -1,23 +1,22 @@
-/**
- * Anílog Root Layout
+﻿/**
+ * Anilog Root Layout
  *
  * Sets up fonts, React Query provider, and root navigation.
+ * v3: Plus Jakarta Sans replaces Playfair Display + DM Sans.
  */
 
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
   useFonts,
-  PlayfairDisplay_400Regular,
-  PlayfairDisplay_700Bold,
-  PlayfairDisplay_900Black,
-} from '@expo-google-fonts/playfair-display';
-import {
-  DMSans_400Regular,
-  DMSans_500Medium,
-  DMSans_700Bold,
-} from '@expo-google-fonts/dm-sans';
+  PlusJakartaSans_400Regular,
+  PlusJakartaSans_500Medium,
+  PlusJakartaSans_600SemiBold,
+  PlusJakartaSans_700Bold,
+  PlusJakartaSans_800ExtraBold,
+} from '@expo-google-fonts/plus-jakarta-sans';
 import {
   SpaceMono_400Regular,
   SpaceMono_700Bold,
@@ -31,7 +30,7 @@ SplashScreen.preventAutoHideAsync();
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 5,
       retry: 2,
     },
   },
@@ -39,12 +38,11 @@ const queryClient = new QueryClient({
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
-    PlayfairDisplay_400Regular,
-    PlayfairDisplay_700Bold,
-    PlayfairDisplay_900Black,
-    DMSans_400Regular,
-    DMSans_500Medium,
-    DMSans_700Bold,
+    PlusJakartaSans_400Regular,
+    PlusJakartaSans_500Medium,
+    PlusJakartaSans_600SemiBold,
+    PlusJakartaSans_700Bold,
+    PlusJakartaSans_800ExtraBold,
     SpaceMono_400Regular,
     SpaceMono_700Bold,
   });
@@ -60,6 +58,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
+        <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="camera" options={{ presentation: 'fullScreenModal' }} />
