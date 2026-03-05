@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   },
   heroSpecies: {
     fontFamily: typography.fontFamily.headingBlack,
-    fontSize: 32,
+    fontSize: typography.fontSize['3xl'],
     fontStyle: 'italic',
     color: colors.textInverse,
     lineHeight: 36,

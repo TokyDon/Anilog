@@ -305,6 +305,7 @@ const styles = StyleSheet.create({
   },
   glossyOuterCompact: {
     borderRadius: 16,
+    height: 140,
   },
   glossyBorder: {
     borderRadius: 18,

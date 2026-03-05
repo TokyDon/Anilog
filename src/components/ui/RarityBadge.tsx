@@ -105,7 +105,7 @@ const styles = StyleSheet.create({
   badgeCommon: {
     backgroundColor: '#E8E4DC',
     borderWidth: 1,
-    borderColor: '#C8BFA8',
+    borderColor: colors.surfaceBorder,
   },
   badgeUncommon: {
     backgroundColor: '#D6EDDA',
