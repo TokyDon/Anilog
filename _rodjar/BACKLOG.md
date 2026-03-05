@@ -4,6 +4,17 @@ _Maintained by Rodjar (Orchestrator). Agents read from and write status updates 
 
 ---
 
+## DEEP REDESIGN V2 — MERGED TO MAIN
+Date: 2026-03-05
+Commit: 1c5e411
+Files changed: 24
+QA: PASS (final score 47/70 implementation, all HIGH bugs resolved)
+Token system: specimenCream, inkBlack, amberResin, forestFloor, instrumentBrass (domain-named)
+Key wins: specimen label strip in AnimonCard, amber LED glow in TabBar, naturalist section dividers
+Open (MEDIUM/LOW): B-QA2-008 shimmer inline hex; B-QA2-015 stat chips missing insetPanel; B-QA2-019 4 microinteractions (Capture Stamp, Scanner Lock-On, Tab LED Activation, Shimmer Reveal) not implemented; B-QA2-009/010 AnimonCard untokenized colours; B-QA2-013 stats grid token/radius; B-QA2-016 inline rgba variants; B-QA2-017 SectionRule inconsistency; B-QA2-018 dead emoji field; B-QA2-020 profile hero overlay
+
+---
+
 ## DESIGN SPEC V2 — 2026-03-05
 Status: SPEC COMPLETE — awaiting Frontend Developer implementation  
 Skill adherence: ✅ interface-design invoked + domain exploration completed | ✅ refactoring-ui invoked + pre-scored | ✅ microinteractions invoked + 4 interactions defined  
