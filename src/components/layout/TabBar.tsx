@@ -2,7 +2,7 @@
  * TabBar — v3 Clean Modern
  *
  * White background, 1px top border, safe-area aware.
- * 5 items: Discover | Anilog | [FAB camera] | Logbook | Profile
+ * 4 items: Party | Collection | [FAB camera] | Stamps | Profile
  * Active: icon + label in accent + 4px dot below icon.
  * Inactive: icon + label in text3.
  * Centre FAB: 54px circle lifted 18px, accent gradient, white border.
@@ -17,11 +17,12 @@ import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 
+// ★ Party  ◈ Collection  ◎ Stamps  ◐ Profile
 const TAB_CONFIG: Record<string, { icon: string; label: string }> = {
-  index:   { icon: '\u229E', label: 'Discover' },
-  anilog:  { icon: '\u25C8', label: 'Ani\u0301log' },
-  logbook: { icon: '\u25CE', label: 'Logbook' },
-  profile: { icon: '\u25D0', label: 'Profile' },
+  index:   { icon: '\u2605', label: 'Party'      },
+  anilog:  { icon: '\u25C8', label: 'Collection' },
+  logbook: { icon: '\u25CE', label: 'Stamps'     },
+  profile: { icon: '\u25D0', label: 'Profile'    },
 };
 
 export function TabBar({ state, navigation }: BottomTabBarProps) {

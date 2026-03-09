@@ -86,7 +86,7 @@ export default function MilestonesScreen() {
         <View style={styles.header}>
           <View>
             <Text style={styles.wordmark}>ANÍLOG</Text>
-            <Text style={styles.screenTitle}>Logbook</Text>
+            <Text style={styles.screenTitle}>Stamps</Text>
           </View>
           <View style={styles.specimenBadge}>
             <Text style={styles.specimenBadgeText}>

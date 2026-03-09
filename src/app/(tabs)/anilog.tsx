@@ -72,7 +72,7 @@ export default function AnilogScreen() {
       <View style={styles.header}>
         <View>
           <Text style={styles.wordmark}>ANÃLOG</Text>
-          <Text style={styles.screenTitle}>My AnÃ­log</Text>
+          <Text style={styles.screenTitle}>My Collection</Text>
         </View>
         <View style={styles.specimenBadge}>
           <Text style={styles.specimenBadgeText}>{animons.length} LOGGED</Text>

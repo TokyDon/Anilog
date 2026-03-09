@@ -6,6 +6,7 @@
  */
 
 import { useEffect } from 'react';
+import { View } from 'react-native';
 import { Stack, router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StatusBar } from 'expo-status-bar';
@@ -57,7 +58,7 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return null;
+  if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: '#FAFAF5' }} />;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
