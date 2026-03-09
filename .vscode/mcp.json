@@ -1,0 +1,20 @@
+{
+    "inputs": [
+        {
+            "id": "notion_anilog_token",
+            "type": "promptString",
+            "description": "Notion API token for the Anílog workspace (ntn_...)",
+            "password": true
+        }
+    ],
+    "servers": {
+        "notion-Anilog": {
+            "type": "stdio",
+            "command": "C:\\Users\\james\\AppData\\Roaming\\npm\\notion-mcp-server.cmd",
+            "args": [],
+            "env": {
+                "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${input:notion_anilog_token}\", \"Notion-Version\": \"2022-06-28\"}"
+            }
+        }
+    }
+}

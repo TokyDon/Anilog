@@ -9,6 +9,7 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Stack, router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { usePartyStore } from '../store/partyStore';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import {
@@ -54,6 +55,28 @@ export default function RootLayout() {
       SplashScreen.hideAsync();
       AsyncStorage.getItem('onboarding_complete').then((val) => {
         if (!val) router.replace('/onboarding');
+      });
+      // DEV SEED — one-time gift: Domestic Shorthair Cat
+      AsyncStorage.getItem('dev_seed_v1').then((seeded) => {
+        if (seeded) return;
+        usePartyStore.getState().addToParty(
+          {
+            id: 'dev_cat_001',
+            userId: 'local',
+            species: 'Domestic Shorthair Cat',
+            breed: 'Shorthair',
+            colour: 'Orange Tabby',
+            gender: 'unknown',
+            rarity: 'common',
+            types: ['light', 'psychic'],
+            photoUrl: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400&q=80',
+            region: 'Home',
+            capturedAt: new Date().toISOString(),
+            confidenceScore: 1.0,
+          },
+          'Biscuit',
+        );
+        AsyncStorage.setItem('dev_seed_v1', 'true');
       });
     }
   }, [fontsLoaded]);
