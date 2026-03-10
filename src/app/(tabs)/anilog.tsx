@@ -24,6 +24,7 @@ import { typography } from '../../constants/typography';
 import { AnimonCard } from '../../components/ui/AnimonCard';
 import { EmptyState } from '../../components/ui/EmptyState';
 import { useCollection } from '../../features/collection/useCollection';
+import { useCollectionStore } from '../../store/collectionStore';
 import { ANIMON_TYPES, TYPE_DEFINITIONS } from '../../constants/typeSystem';
 import type { Animon } from '../../types/animon';
 import type { AnimonType } from '../../types/animon';
@@ -44,7 +45,15 @@ const FILTER_OPTIONS: Array<{ key: FilterOption; label: string }> = [
 ];
 
 export default function AnilogScreen() {
-  const { data: animons = [] } = useCollection();
+  const { data: supabaseAnimons = [] } = useCollection();
+  const localAnimons = useCollectionStore((s) => s.animons);
+
+  // Merge: local (seeded starters + captures) + server-synced, deduped by id
+  const animons = useMemo(() => {
+    const localIds = new Set(localAnimons.map((a) => a.id));
+    return [...localAnimons, ...supabaseAnimons.filter((a) => !localIds.has(a.id))];
+  }, [localAnimons, supabaseAnimons]);
+
   const [activeFilter, setActiveFilter] = useState<FilterOption>('all');
 
   const filteredAnimons = useMemo(() => {

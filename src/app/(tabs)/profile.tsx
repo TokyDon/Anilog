@@ -21,6 +21,7 @@ import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { AnimonCard } from '../../components/ui/AnimonCard';
 import { useCollection } from '../../features/collection/useCollection';
+import { useCollectionStore } from '../../store/collectionStore';
 import { useAuthStore } from '../../store/authStore';
 import type { Animon, AnimonRarity } from '../../types/animon';
 
@@ -36,7 +37,13 @@ function formatMemberSince(iso: string): string {
 }
 
 export default function ProfileScreen() {
-  const { data: animons = [], isLoading } = useCollection();
+  const { data: supabaseAnimons = [], isLoading } = useCollection();
+  const localAnimons = useCollectionStore((s) => s.animons);
+  // Merge local (starters) + server, deduped by id
+  const animons = React.useMemo(() => {
+    const localIds = new Set(localAnimons.map((a) => a.id));
+    return [...localAnimons, ...supabaseAnimons.filter((a) => !localIds.has(a.id))];
+  }, [localAnimons, supabaseAnimons]);
   const user = useAuthStore((s) => s.user);
   const [storedUsername, setStoredUsername] = useState<string | null>(null);
 
