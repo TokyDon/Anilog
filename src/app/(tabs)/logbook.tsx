@@ -113,7 +113,7 @@ export default function MilestonesScreen() {
           {rarityData.map((r) => (
             <View key={r.rarity} style={styles.rarityCell}>
               <RarityBadge rarity={r.rarity} />
-              <Text style={[styles.rarityCount, { color: colors.rarity[r.rarity] }]}>
+              <Text style={styles.rarityCount}>
                 {r.count}
               </Text>
               <Text style={styles.rarityLabel}>SPECIMENS</Text>
@@ -174,32 +174,36 @@ const styles = StyleSheet.create({
   },
   scrollContent: { paddingBottom: 16 },
 
-  // Dark header
+  // Light header — matches Party and Collection tabs
   header: {
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.bg,
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 22,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
-    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
   wordmark: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
     color: colors.text3,
-    letterSpacing: 4,
+    letterSpacing: typography.letterSpacing.widest,
     textTransform: 'uppercase',
+    marginBottom: 4,
   },
   screenTitle: {
-    fontFamily: typography.fontFamily.bodySemiBold,
-    fontSize: typography.fontSize['3xl'],
-    color: colors.textInverse,
-    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xl,
+    color: colors.text1,
+    lineHeight: typography.fontSize.xl * typography.lineHeight.tight,
   },
   specimenBadge: {
+    backgroundColor: colors.surface2,
     borderWidth: 1,
-    borderColor: colors.borderStrong,
+    borderColor: colors.border,
     borderRadius: 3,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -281,11 +285,12 @@ const styles = StyleSheet.create({
   rarityCount: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: typography.fontSize['4xl'],
+    color: colors.text1,
     marginTop: 8,
   },
   rarityLabel: {
     fontFamily: typography.fontFamily.body,
-    fontSize: 10,
+    fontSize: typography.fontSize.xs,
     textTransform: 'uppercase',
     color: colors.text3,
     marginTop: 4,
@@ -342,7 +347,7 @@ const styles = StyleSheet.create({
     width: 24,
     height: 24,
     borderRadius: 2,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.accent,
     alignItems: 'center',
     justifyContent: 'center',
   },
