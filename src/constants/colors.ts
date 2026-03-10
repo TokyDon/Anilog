@@ -28,8 +28,9 @@ export const colors = {
   accentDeep: '#1D4ED8',   // pressed / deep state
 
   // ── Device chrome ──────────────────────────────────────────────────────────
-  bezel:   '#FFFFFF',
-  navDark: '#FAFAFA',      // tab bar / nav background (almost white)
+  bezel:       '#FFFFFF',
+  navDark:     '#FAFAFA',      // tab bar / nav background (almost white)
+  surfaceDark: '#1C1C1E',      // intentionally dark surface — hero zones, camera bg
 
   // ── Rarity (the ONLY high-chroma colours in the app) ──────────────────────
   rarity: {
