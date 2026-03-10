@@ -9,9 +9,9 @@ import { useEffect } from 'react';
 import { View } from 'react-native';
 import { Stack, router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getCurrentUser } from '../services/supabase/auth';
 import { StatusBar } from 'expo-status-bar';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { supabase } from '../services/supabase/client';
 import {
   useFonts,
   PlusJakartaSans_400Regular,
@@ -51,19 +51,38 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-      Promise.all([
+    if (!fontsLoaded) return;
+    SplashScreen.hideAsync();
+
+    // Initial routing check on startup
+    async function checkAuth() {
+      const [onboardingComplete, { data: { session } }] = await Promise.all([
         AsyncStorage.getItem('onboarding_complete'),
-        getCurrentUser(),
-      ]).then(([onboardingComplete, currentUser]) => {
-        if (!currentUser) {
-          router.replace('/(auth)');
-        } else if (!onboardingComplete) {
-          router.replace('/onboarding');
-        }
-      });
+        supabase.auth.getSession(),
+      ]);
+      if (!session) {
+        router.replace('/(auth)');
+      } else if (!onboardingComplete) {
+        router.replace('/onboarding');
+      }
     }
+    checkAuth();
+
+    // Also react to auth state changes (login, logout, token refresh)
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT') {
+        router.replace('/(auth)');
+      } else if (event === 'SIGNED_IN' && session) {
+        const onboardingComplete = await AsyncStorage.getItem('onboarding_complete');
+        if (!onboardingComplete) {
+          router.replace('/onboarding');
+        } else {
+          router.replace('/');
+        }
+      }
+    });
+
+    return () => subscription.unsubscribe();
   }, [fontsLoaded]);
 
   if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: '#FAFAF5' }} />;
