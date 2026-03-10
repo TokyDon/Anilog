@@ -9,6 +9,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
+  ScrollView,
   StyleSheet,
   TouchableOpacity,
   Dimensions,
@@ -35,6 +36,9 @@ import { AchievementUnlockToast } from '../components/ui/AchievementUnlockToast'
 import { useCapture } from '../features/capture/useCapture';
 import { getScanCount } from '../services/supabase/scans';
 import { useAuthStore } from '../store/authStore';
+import { SPECIES_REGISTRY } from '../data/speciesRegistry';
+import type { SpeciesEntry } from '../data/speciesRegistry';
+import { getIllustrationUrl } from '../services/supabase/storage';
 
 const { height: H } = Dimensions.get('window');
 const RETICLE_SIZE = 240;
@@ -77,6 +81,8 @@ export default function CameraScreen() {
   const [toastMessage, setToastMessage] = useState('');
   const [toastVisible, setToastVisible] = useState(false);
   const [scansUsed, setScansUsed] = useState(0);
+  const [illustrationUrl, setIllustrationUrl] = useState<string | null>(null);
+  const [speciesEntry, setSpeciesEntry] = useState<SpeciesEntry | null>(null);
 
   const cameraRef = useRef<CameraView>(null);
   /** Mirrors captureState synchronously for use inside async interval callbacks. */
@@ -222,6 +228,13 @@ export default function CameraScreen() {
       setCaptureState('result');
       resultY.value = withSpring(0, { damping: 22, stiffness: 100 });
       if (user) getScanCount(user.id).then(setScansUsed).catch(() => {});
+      if (captured) {
+        const entry = SPECIES_REGISTRY.find(e => e.id === captured.species) ?? null;
+        setSpeciesEntry(entry);
+        if (entry) {
+          getIllustrationUrl(entry.illustrationKey).then(url => setIllustrationUrl(url ?? null)).catch(() => {});
+        }
+      }
     }, 1500);
 
     return () => clearTimeout(t);
@@ -305,6 +318,8 @@ export default function CameraScreen() {
   function handleScanAgain() {
     resultY.value = withTiming(H, { duration: 300 });
     lockOnProgress.value = withTiming(0, { duration: 150 });
+    setIllustrationUrl(null);
+    setSpeciesEntry(null);
     setTimeout(() => {
       reset();
       captureStateRef.current = 'loop_active';
@@ -315,10 +330,25 @@ export default function CameraScreen() {
   function handleClose() {
     resultY.value = withTiming(H, { duration: 300 });
     lockOnProgress.value = withTiming(0, { duration: 150 });
+    setIllustrationUrl(null);
+    setSpeciesEntry(null);
     setTimeout(() => {
       reset();
       captureStateRef.current = 'idle';
       setCaptureState('idle');
+    }, 320);
+  }
+
+  function handleViewCollection() {
+    resultY.value = withTiming(H, { duration: 300 });
+    lockOnProgress.value = withTiming(0, { duration: 150 });
+    setIllustrationUrl(null);
+    setSpeciesEntry(null);
+    setTimeout(() => {
+      reset();
+      captureStateRef.current = 'idle';
+      setCaptureState('idle');
+      router.replace('/(tabs)/anilog' as never);
     }, 320);
   }
 
@@ -495,12 +525,17 @@ export default function CameraScreen() {
         </View>
 
         <View style={styles.resultActions}>
-          <TouchableOpacity style={styles.retryBtn} onPress={handleClose}>
-            <Text style={styles.retryBtnText}>CLOSE</Text>
+          <TouchableOpacity style={styles.viewCollectionBtn} onPress={handleViewCollection}>
+            <Text style={styles.viewCollectionBtnText}>VIEW COLLECTION</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.addBtn} onPress={handleScanAgain}>
-            <Text style={styles.addBtnText}>SCAN AGAIN</Text>
-          </TouchableOpacity>
+          <View style={styles.resultActionsRow}>
+            <TouchableOpacity style={styles.retryBtn} onPress={handleClose}>
+              <Text style={styles.retryBtnText}>RELEASE</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.addBtn} onPress={handleScanAgain}>
+              <Text style={styles.addBtnText}>SCAN AGAIN</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Animated.View>
 
@@ -863,9 +898,25 @@ const styles = StyleSheet.create({
     color: colors.text2,
   },
   resultActions: {
+    flexDirection: 'column',
+    gap: 10,
+    paddingBottom: 8,
+  },
+  viewCollectionBtn: {
+    backgroundColor: colors.accent,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  viewCollectionBtnText: {
+    fontFamily: typography.fontFamily.monoBold,
+    fontSize: 13,
+    color: colors.bezel,
+    letterSpacing: 1,
+  },
+  resultActionsRow: {
     flexDirection: 'row',
     gap: 12,
-    paddingBottom: 8,
   },
   retryBtn: {
     flex: 1,
