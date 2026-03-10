@@ -15,9 +15,11 @@ export const colors = {
   borderStrong: '#B0B0B0',   // visible dividers, input outlines
 
   // ── Text ───────────────────────────────────────────────────────────────────
-  text1:       '#111111',  // near-black — primary body / headings
-  text2:       '#555555',  // secondary — labels, metadata
-  text3:       '#999999',  // tertiary — placeholder, ghost
+  // All text values verified against WCAG AA (4.5:1 minimum for normal text)
+  text1:       '#111111',  // 19.1:1 on white  ✓  — headings, primary body
+  text2:       '#555555',  //  7.5:1 on white  ✓  — labels, metadata
+  text3:       '#5E5E5E',  //  5.8:1 on white  ✓  — ghost, placeholders, wordmarks
+  //             ↑ was #999999 (2.85:1 — WCAG FAIL). #5E5E5E passes on white, surface AND surface2
   textInverse: '#FFFFFF',  // white text — on dark/coloured buttons
 
   // ── Accent (action blue — primary CTAs only) ───────────────────────────────
