@@ -61,12 +61,12 @@ export default function AuthGateScreen() {
 
         {/* Hero headline */}
         <Text style={styles.heroHeadline}>
-          {'The wild world,\ncatalogued.'}
+          {'The wild is full of\nthings worth catching.'}
         </Text>
 
         {/* Tagline */}
         <Text style={styles.tagline}>
-          {'Discover, scan, and name the Anímons\nliving around you.'}
+          {'Spot real animals. Catch them.\nBuild your party.'}
         </Text>
       </View>
 

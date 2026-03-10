@@ -199,7 +199,7 @@ export default function OnboardingScreen() {
               <Text style={styles.stepLabel}>STEP 1 OF {TOTAL_STEPS}</Text>
               <Text style={styles.headline}>What's an Animon?</Text>
               <Text style={styles.bodyText}>
-                {`An Animon is any real animal you've encountered in the wild — a fox crossing the road, a heron on the riverbank, the beetle under a log. You spot it. You log it. It's yours.\n\nEvery sighting becomes part of your permanent field record.`}
+                {`An Animon is any real animal you've found out in the wild — a fox crossing the road, a heron on the riverbank, the beetle under a log. You spot it. You catch it. It's yours.\n\nEvery creature you find becomes a permanent part of your collection.`}
               </Text>
               <View style={styles.btnStack}>
                 <TouchableOpacity style={styles.primaryBtn} onPress={advance}>
@@ -219,7 +219,7 @@ export default function OnboardingScreen() {
               <Text style={styles.stepLabel}>STEP 2 OF {TOTAL_STEPS}</Text>
               <Text style={styles.headline}>How to catch one</Text>
               <Text style={styles.bodyText}>
-                {`Open the camera, point it at the animal — or a photo of one — and Anílog identifies the species. First sighting of a species? It joins your collection as a new Animon.\n\nSeen it before? Your encounter count goes up.`}
+                {`Open the camera and point it at any animal — or a photo of one. Anílog identifies the species and catches it for you. First time finding that species? It joins your party as a brand new Animon.\n\nAlready got one? Find it again — your collection grows deeper.`}
               </Text>
               <View style={styles.btnStack}>
                 <TouchableOpacity style={styles.primaryBtn} onPress={advance}>
@@ -238,7 +238,7 @@ export default function OnboardingScreen() {
               <Text style={styles.stepLabel}>STEP 3 OF {TOTAL_STEPS}</Text>
               <Text style={styles.headline}>Choose your first Animon</Text>
               <Text style={styles.bodyText}>
-                {`Every naturalist starts somewhere. Pick the animal that feels like yours — you'll catch plenty more out in the field.`}
+                {`Every trainer needs a starter. Pick the Animon that feels like yours — the wild is full of plenty more waiting to be caught.`}
               </Text>
               <View style={styles.starterList}>
                 {STARTER_ANIMONS.map((a) => (
@@ -312,9 +312,9 @@ export default function OnboardingScreen() {
             <View style={styles.stepContainer}>
               <Text style={styles.permissionEmoji}>📷</Text>
               <Text style={styles.stepLabel}>STEP 5 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>Start scanning</Text>
+              <Text style={styles.headline}>Your adventure starts here</Text>
               <Text style={styles.bodyText}>
-                Anílog uses your camera to identify animals in real time. Allow camera access to start catching Animons.
+                Point your camera at any animal and catch it on the spot. Give Anílog access and start building your party.
               </Text>
               {cameraRequested && (
                 <View style={styles.statusBadge}>
@@ -341,9 +341,9 @@ export default function OnboardingScreen() {
             <View style={styles.stepContainer}>
               <Text style={styles.permissionEmoji}>🔔</Text>
               <Text style={styles.stepLabel}>STEP 6 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>Stay notified</Text>
+              <Text style={styles.headline}>Never miss a rare one</Text>
               <Text style={styles.bodyText}>
-                Get alerts for rare Animon sightings nearby and milestone unlocks.
+                Turn on notifications and we'll alert you when a legendary Animon is spotted nearby — or when you hit a new milestone.
               </Text>
               {notifRequested && (
                 <View style={styles.statusBadge}>
