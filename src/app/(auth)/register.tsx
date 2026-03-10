@@ -113,8 +113,12 @@ export default function RegisterScreen() {
 
     setIsLoading(true);
     try {
-      await signUpWithEmail(email.trim().toLowerCase(), password);
-      router.replace('/onboarding');
+      const { session } = await signUpWithEmail(email.trim().toLowerCase(), password);
+      if (!session) {
+        // Email confirmation is ON — tell user to check inbox
+        setServerError('Account created! Please check your email to confirm your address, then sign in.');
+      }
+      // If session exists, navigation is handled by onAuthStateChange in _layout.tsx
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unknown error';
       if (message.toLowerCase().includes('already registered') ||

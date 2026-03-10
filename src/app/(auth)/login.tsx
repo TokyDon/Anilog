@@ -78,8 +78,8 @@ export default function LoginScreen() {
 
     setIsLoading(true);
     try {
+      // Navigation is handled by onAuthStateChange in _layout.tsx
       await signInWithEmail(email.trim().toLowerCase(), password);
-      router.replace('/');
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Unknown error';
       if (
@@ -89,6 +89,8 @@ export default function LoginScreen() {
         message.toLowerCase().includes('incorrect')
       ) {
         setServerError('Email or password is incorrect. Try again.');
+      } else if (message.toLowerCase().includes('email not confirmed')) {
+        setServerError('Please confirm your email address before signing in. Check your inbox.');
       } else {
         setServerError('Something went wrong. Check your connection and try again.');
       }

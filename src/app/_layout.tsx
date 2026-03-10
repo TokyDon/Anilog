@@ -54,31 +54,24 @@ export default function RootLayout() {
     if (!fontsLoaded) return;
     SplashScreen.hideAsync();
 
-    // Initial routing check on startup
-    async function checkAuth() {
-      const [onboardingComplete, { data: { session } }] = await Promise.all([
-        AsyncStorage.getItem('onboarding_complete'),
-        supabase.auth.getSession(),
-      ]);
-      if (!session) {
-        router.replace('/(auth)');
-      } else if (!onboardingComplete) {
-        router.replace('/onboarding');
-      }
-    }
-    checkAuth();
-
-    // Also react to auth state changes (login, logout, token refresh)
+    // Single source of truth for all auth-driven routing.
+    // INITIAL_SESSION fires on app load (session present or null).
+    // SIGNED_IN fires after login/register.
+    // SIGNED_OUT fires after signOut.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT') {
-        router.replace('/(auth)');
-      } else if (event === 'SIGNED_IN' && session) {
-        const onboardingComplete = await AsyncStorage.getItem('onboarding_complete');
-        if (!onboardingComplete) {
-          router.replace('/onboarding');
+      if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
+        if (!session) {
+          router.replace('/(auth)');
         } else {
-          router.replace('/');
+          const onboardingComplete = await AsyncStorage.getItem('onboarding_complete');
+          if (!onboardingComplete) {
+            router.replace('/onboarding');
+          } else {
+            router.replace('/');
+          }
         }
+      } else if (event === 'SIGNED_OUT') {
+        router.replace('/(auth)');
       }
     });
 
