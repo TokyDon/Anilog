@@ -20,6 +20,7 @@ import { router } from 'expo-router';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { usePartyStore, PARTY_SIZE } from '../../store/partyStore';
+import { TypeTagChip } from '../../components/ui/TypeTagChip';
 import { TYPE_DEFINITIONS } from '../../constants/typeSystem';
 import type { PartySlot } from '../../types/party';
 
@@ -52,11 +53,19 @@ function PartyCard({ slot, slotIndex }: PartyCardProps) {
   }
 
   const { animon } = slot;
-  const typeColor = TYPE_DEFINITIONS[animon.types[0]]?.color ?? colors.accent;
+  const def = TYPE_DEFINITIONS[animon.types[0]];
+  const typeColor = def.color;
+  const textColor = def.textColor;
+  const textAlpha65 = textColor === '#FFFFFF' ? 'rgba(255,255,255,0.65)' : 'rgba(15,23,42,0.65)';
+  const levelBadgeBg = textColor === '#FFFFFF' ? 'rgba(255,255,255,0.22)' : 'rgba(0,0,0,0.10)';
 
   return (
     <Pressable
-      style={({ pressed }) => [styles.occupiedCard, pressed && { opacity: 0.85 }]}
+      style={({ pressed }) => [
+        styles.occupiedCard,
+        { backgroundColor: typeColor, shadowColor: typeColor },
+        pressed && { opacity: 0.85 }
+      ]}
       onPress={() => router.push(`/animon/${animon.id}`)}
     >
       <View style={styles.cardInner}>
@@ -70,17 +79,15 @@ function PartyCard({ slot, slotIndex }: PartyCardProps) {
         </View>
         <View style={styles.cardInfo}>
           <View style={styles.cardInfoTop}>
-            <Text style={styles.nickname} numberOfLines={1}>{animon.nickname}</Text>
-            <View style={styles.levelBadge}>
-              <Text style={styles.levelText}>Lv.{animon.level}</Text>
+            <Text style={[styles.nickname, { color: textColor }]} numberOfLines={1}>{animon.nickname}</Text>
+            <View style={[styles.levelBadge, { backgroundColor: levelBadgeBg, borderWidth: 0 }]}>
+              <Text style={[styles.levelText, { color: textColor }]}>Lv.{animon.level}</Text>
             </View>
           </View>
-          <Text style={styles.species} numberOfLines={1}>{animon.species}</Text>
-          <View style={styles.typeRow}>
+          <Text style={[styles.species, { color: textAlpha65 }]} numberOfLines={1}>{animon.species}</Text>
+          <View style={{ flexDirection: 'row', gap: 6, marginTop: 2 }}>
             {animon.types.slice(0, 2).map((t) => (
-              <View key={t} style={styles.typeChip}>
-                <Text style={styles.typeChipText}>{t.toUpperCase()}</Text>
-              </View>
+              <TypeTagChip key={t} type={t} size="sm" onCard />
             ))}
           </View>
         </View>
@@ -140,7 +147,7 @@ const styles = StyleSheet.create({
   // ── Header ─────────────────────────────────────────────────────────────────
   header: {
     backgroundColor: colors.bg,
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 22,
     flexDirection: 'row',
@@ -151,16 +158,16 @@ const styles = StyleSheet.create({
   },
   wordmark: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 13,
+    fontSize: typography.fontSize.sm,
     letterSpacing: typography.letterSpacing.widest,
     color: colors.text3,
     marginBottom: 4,
   },
   screenTitle: {
     fontFamily: typography.fontFamily.bodyBold,
-    fontSize: 22,
+    fontSize: typography.fontSize.xl,
     color: colors.text1,
-    lineHeight: 24,
+    lineHeight: typography.fontSize.xl * typography.lineHeight.tight,
   },
   partyBadge: {
     backgroundColor: colors.surface2,
@@ -189,29 +196,23 @@ const styles = StyleSheet.create({
   // ── Shared card ─────────────────────────────────────────────────────────────
   cardInfo: {
     flex: 1,
-    paddingLeft: 14,
+    paddingLeft: 16,
     justifyContent: 'center',
     gap: 5,
   },
 
   // ── Occupied card ───────────────────────────────────────────────────────────
   occupiedCard: {
-    backgroundColor: colors.surface,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
     flexDirection: 'row',
     alignItems: 'stretch',
     overflow: 'hidden',
-    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 6,
     elevation: 2,
-  },
-  typeBar: {
-    width: 5,
-    alignSelf: 'stretch',
   },
   cardInner: {
     flex: 1,
@@ -246,17 +247,13 @@ const styles = StyleSheet.create({
   },
   nickname: {
     fontFamily: typography.fontFamily.bodySemiBold,
-    fontSize: 15,
-    color: colors.text1,
+    fontSize: typography.fontSize.base,
     flex: 1,
   },
   levelBadge: {
-    backgroundColor: colors.surface2,
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    borderWidth: 1,
-    borderColor: colors.borderStrong,
   },
   levelText: {
     fontFamily: typography.fontFamily.monoBold,
@@ -265,30 +262,11 @@ const styles = StyleSheet.create({
     letterSpacing: typography.letterSpacing.wide,
   },
   species: {
-    fontFamily: typography.fontFamily.mono,
+    fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: colors.text2,
     letterSpacing: typography.letterSpacing.label,
   },
-  typeRow: {
-    flexDirection: 'row',
-    gap: 6,
-    marginTop: 2,
-  },
-  typeChip: {
-    backgroundColor: colors.surface2,
-    borderRadius: 4,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  typeChipText: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    color: colors.text2,
-    letterSpacing: typography.letterSpacing.label,
-  },
-
-  // ── Empty slot card ─────────────────────────────────────────────────────────
+  // ── Empty slot card ────────────────────────────────────────────────────────────────────────
   emptyCard: {
     backgroundColor: colors.surface,
     borderRadius: 12,
@@ -298,6 +276,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
+    overflow: 'hidden',
   },
   emptyPhotoPlaceholder: {
     width: CARD_PHOTO_SIZE,
