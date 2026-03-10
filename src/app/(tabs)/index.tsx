@@ -13,8 +13,10 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  Pressable,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
 import { usePartyStore, PARTY_SIZE } from '../../store/partyStore';
@@ -53,7 +55,10 @@ function PartyCard({ slot, slotIndex }: PartyCardProps) {
   const typeColor = TYPE_DEFINITIONS[animon.types[0]]?.color ?? colors.accent;
 
   return (
-    <View style={styles.occupiedCard}>
+    <Pressable
+      style={({ pressed }) => [styles.occupiedCard, pressed && { opacity: 0.85 }]}
+      onPress={() => router.push(`/animon/${animon.id}`)}
+    >
       <View style={styles.cardInner}>
         <View style={styles.photoWrap}>
           <Image
@@ -80,7 +85,7 @@ function PartyCard({ slot, slotIndex }: PartyCardProps) {
           </View>
         </View>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

@@ -25,6 +25,7 @@ import { TYPE_DEFINITIONS } from '../../constants/typeSystem';
 import { RarityBadge } from '../../components/ui/RarityBadge';
 import { TypeTagChip } from '../../components/ui/TypeTagChip';
 import { useCollectionStore } from '../../store/collectionStore';
+import { usePartyStore } from '../../store/partyStore';
 import { SPECIES_REGISTRY } from '../../data/speciesRegistry';
 import type { SpeciesEntry } from '../../data/speciesRegistry';
 import { getIllustrationUrl, getCapturePhotoUrl } from '../../services/supabase/storage';
@@ -49,7 +50,10 @@ function genderLabel(g: string): string {
 export default function AnimonDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const animons = useCollectionStore((s) => s.animons);
-  const animon = animons.find((a) => a.id === id);
+  const partySlots = usePartyStore((s) => s.slots);
+  const animon =
+    animons.find((a) => a.id === id) ??
+    partySlots.flatMap((s) => (s ? [s.animon] : [])).find((a) => a.id === id);
 
   if (!animon) {
     return (

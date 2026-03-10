@@ -31,6 +31,7 @@ import { colors } from '../constants/colors';
 import { typography } from '../constants/typography';
 import { STARTER_ANIMONS } from '../data/starters';
 import { usePartyStore } from '../store/partyStore';
+import { useCollectionStore } from '../store/collectionStore';
 import { TypeTagChip } from '../components/ui/TypeTagChip';
 import { RarityBadge } from '../components/ui/RarityBadge';
 import type { Animon } from '../types/animon';
@@ -173,6 +174,8 @@ export default function OnboardingScreen() {
   const handleFinish = async () => {
     if (selectedStarter) {
       addToParty(selectedStarter, nickname.trim() || selectedStarter.species);
+      // Also seed the collection so the starter appears in My Collection
+      useCollectionStore.getState().addAnimon(selectedStarter);
     }
     await AsyncStorage.setItem('onboarding_complete', 'true');
     router.replace('/(tabs)');
