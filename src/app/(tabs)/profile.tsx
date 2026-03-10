@@ -14,7 +14,6 @@ import {
   Dimensions,
   ActivityIndicator,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -203,12 +202,7 @@ export default function ProfileScreen() {
 
         {/* ── Anílog+ banner ─────────────────────────────────────── */}
         <View style={styles.bannerWrap}>
-          <LinearGradient
-            colors={[colors.navDark, colors.bezel, colors.navDark]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-            style={styles.upgradeBanner}
-          >
+          <View style={styles.upgradeBanner}>
             <View style={styles.upgradeText}>
               <Text style={styles.upgradeTitle}>Anílog+ ✨</Text>
               <Text style={styles.upgradeSub}>
@@ -218,7 +212,7 @@ export default function ProfileScreen() {
             <TouchableOpacity style={styles.upgradeBtn}>
               <Text style={styles.upgradeBtnText}>UPGRADE</Text>
             </TouchableOpacity>
-          </LinearGradient>
+          </View>
         </View>
 
         <View style={{ height: 32 }} />
@@ -237,7 +231,7 @@ const styles = StyleSheet.create({
   // Hero zone
   heroZone: {
     height: 210,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.surfaceDark,
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: 24,
@@ -282,8 +276,8 @@ const styles = StyleSheet.create({
   },
   memberSince: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 11,
-    color: 'rgba(255,255,255,0.55)',
+    fontSize: typography.fontSize.xs,
+    color: 'rgba(255,255,255,0.87)',
     marginTop: 4,
     letterSpacing: 1,
   },
@@ -333,7 +327,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 10,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     marginTop: 4,
     letterSpacing: 1.5,
@@ -386,7 +380,7 @@ const styles = StyleSheet.create({
   },
   rarityLegendText: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 10,
+    fontSize: typography.fontSize.xs,
     color: colors.text2,
     letterSpacing: 0.8,
   },
@@ -414,7 +408,7 @@ const styles = StyleSheet.create({
     color: colors.text2,
   },
   emptyRecentBtn: {
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.accent,
     borderRadius: 3,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -439,16 +433,17 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   upgradeBanner: {
+    backgroundColor: colors.accentSoft,
     borderRadius: 4,
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
     borderWidth: 1.5,
-    borderColor: colors.borderStrong,
-    shadowColor: colors.text3,
+    borderColor: colors.accent,
+    shadowColor: colors.accent,
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.30,
+    shadowOpacity: 0.20,
     shadowRadius: 8,
     elevation: 6,
   },
@@ -456,12 +451,12 @@ const styles = StyleSheet.create({
   upgradeTitle: {
     fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize.lg,
-    color: colors.textInverse,
+    color: colors.accentDeep,
   },
   upgradeSub: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: 'rgba(255,255,255,0.65)',
+    color: colors.text2,
     lineHeight: typography.fontSize.sm * 1.5,
   },
   upgradeBtn: {
