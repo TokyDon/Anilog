@@ -21,6 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
+import { TYPE_DEFINITIONS } from '../../constants/typeSystem';
 import { RarityBadge } from '../../components/ui/RarityBadge';
 import { TypeTagChip } from '../../components/ui/TypeTagChip';
 import { useCollectionStore } from '../../store/collectionStore';
@@ -68,8 +69,10 @@ export default function AnimonDetailScreen() {
     { label: 'CAUGHT',     value: formatDate(animon.capturedAt) },
   ];
 
+  const typeColor = TYPE_DEFINITIONS[animon.types[0]].color;
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: typeColor }]}>
       {/* ── Hero Image ──────────────────────────────────────────── */}
       <View style={[styles.hero, { height: HERO_HEIGHT }]}>
         <Image
@@ -239,8 +242,8 @@ const styles = StyleSheet.create({
   sheet: {
     flex: 1,
     backgroundColor: colors.bg,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    borderTopLeftRadius: 28,
+    borderTopRightRadius: 28,
   },
   sheetContent: {
     padding: 20,
