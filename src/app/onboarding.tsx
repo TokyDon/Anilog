@@ -157,7 +157,6 @@ export default function OnboardingScreen() {
 
   const handleAddToParty = () => {
     if (!selectedStarter) return;
-    addToParty(selectedStarter, nickname.trim() || selectedStarter.species);
     advance();
   };
 
@@ -172,6 +171,9 @@ export default function OnboardingScreen() {
   };
 
   const handleFinish = async () => {
+    if (selectedStarter) {
+      addToParty(selectedStarter, nickname.trim() || selectedStarter.species);
+    }
     await AsyncStorage.setItem('onboarding_complete', 'true');
     router.replace('/');
   };

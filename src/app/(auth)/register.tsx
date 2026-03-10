@@ -69,6 +69,7 @@ export default function RegisterScreen() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState<string | null>(null);
   const [serverError, setServerError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -93,6 +94,7 @@ export default function RegisterScreen() {
   async function handleSubmit() {
     // Clear previous errors
     setEmailError('');
+    setPasswordError(null);
     setServerError('');
 
     // Client-side validation
@@ -105,7 +107,7 @@ export default function RegisterScreen() {
       return;
     }
     if (!isPasswordValid(password)) {
-      setServerError('Password needs at least 8 characters, one uppercase letter, and one number.');
+      setPasswordError('Password needs at least 8 characters, one uppercase letter, and one number.');
       return;
     }
 
@@ -187,7 +189,7 @@ export default function RegisterScreen() {
                   ref={passwordRef}
                   style={[styles.input, styles.inputWithEye]}
                   value={password}
-                  onChangeText={setPassword}
+                  onChangeText={(t) => { setPassword(t); setPasswordError(null); }}
                   placeholder="Create a password"
                   placeholderTextColor={colors.text3}
                   secureTextEntry={!showPassword}
@@ -205,6 +207,11 @@ export default function RegisterScreen() {
                 </TouchableOpacity>
               </View>
             </View>
+
+            {/* Inline password error (submit-time) */}
+            {passwordError ? (
+              <Text style={styles.fieldError}>{passwordError}</Text>
+            ) : null}
 
             {/* Password hints */}
             <View style={styles.hintsContainer}>
