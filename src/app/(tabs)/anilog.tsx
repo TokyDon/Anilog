@@ -96,7 +96,7 @@ export default function AnilogScreen() {
               style={[
                 styles.filterChip,
                 isActive
-                  ? [styles.filterChipActive, typeColor ? { borderColor: typeColor } : {}]
+                  ? [styles.filterChipActive, typeColor ? { backgroundColor: typeColor, borderColor: typeColor } : {}]
                   : styles.filterChipInactive,
               ]}
               onPress={() => setActiveFilter(opt.key)}
@@ -105,7 +105,7 @@ export default function AnilogScreen() {
                 style={[
                   styles.filterChipText,
                   isActive
-                    ? { color: typeColor ?? colors.accent }
+                    ? { color: typeColor ? TYPE_DEFINITIONS[opt.key as AnimonType].textColor : colors.textInverse }
                     : styles.filterChipTextInactive,
                 ]}
               >
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   filterChipActive: {
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.accent,
     borderColor: colors.accent,
   },
   filterChipText: {
