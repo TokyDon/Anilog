@@ -47,7 +47,7 @@ export default function CameraScreen() {
   const [flashOn, setFlashOn] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
-  const { captured, isIdentifying, error, needsDisambiguation, pendingAchievement, capture, reset, clearPendingAchievement } = useCapture();
+  const { captured, capturedPhotoUri, isIdentifying, error, needsDisambiguation, scanLimitReached, pendingAchievement, capture, reset, clearPendingAchievement } = useCapture();
 
   // Scan line Y offset (within reticle)
   const scanY = useSharedValue(0);
@@ -186,7 +186,7 @@ export default function CameraScreen() {
       <View style={styles.viewfinder}>
         {captureState === 'result' && captured ? (
           <Image
-            source={{ uri: captured.photoUrl }}
+            source={{ uri: capturedPhotoUri ?? captured.photoUrl }}
             style={StyleSheet.absoluteFill}
             contentFit="cover"
           />
@@ -277,7 +277,7 @@ export default function CameraScreen() {
 
         <View style={styles.resultImageRow}>
           <Image
-            source={{ uri: captured?.photoUrl }}
+            source={{ uri: capturedPhotoUri ?? captured?.photoUrl }}
             style={styles.resultThumb}
             contentFit="cover"
           />
@@ -314,6 +314,22 @@ export default function CameraScreen() {
           </TouchableOpacity>
         </View>
       </Animated.View>
+
+      {/* ── Scan Limit Overlay ────────────────────────────────── */}
+      {scanLimitReached && (
+        <View style={styles.scanLimitOverlay}>
+          <Text style={styles.scanLimitTitle}>Daily Limit Reached</Text>
+          <Text style={styles.scanLimitBody}>You've used all 20 scans for today.</Text>
+          <View style={styles.scanLimitActions}>
+            <TouchableOpacity style={styles.scanLimitSecondary} onPress={() => router.back()}>
+              <Text style={styles.scanLimitSecondaryText}>Remind Me Tomorrow</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.scanLimitPrimary} onPress={() => router.back()}>
+              <Text style={styles.scanLimitPrimaryText}>Go Premium</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
 
       {/* ── Achievement Unlock Toast ────────────────────────────── */}
       {pendingAchievement && (
@@ -640,6 +656,60 @@ const styles = StyleSheet.create({
     elevation: 7,
   },
   addBtnText: {
+    fontFamily: typography.fontFamily.monoBold,
+    fontSize: 13,
+    color: colors.textInverse,
+    letterSpacing: 1,
+  },
+
+  // Scan limit overlay
+  scanLimitOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0,0,0,0.88)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 32,
+    gap: 12,
+  },
+  scanLimitTitle: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize['2xl'],
+    color: colors.text1,
+    textAlign: 'center',
+  },
+  scanLimitBody: {
+    fontFamily: typography.fontFamily.body,
+    fontSize: typography.fontSize.base,
+    color: colors.text2,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  scanLimitActions: {
+    width: '100%',
+    gap: 10,
+  },
+  scanLimitSecondary: {
+    borderWidth: 1.5,
+    borderColor: colors.border,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  scanLimitSecondaryText: {
+    fontFamily: typography.fontFamily.mono,
+    fontSize: 13,
+    color: colors.text2,
+    letterSpacing: 1,
+  },
+  scanLimitPrimary: {
+    backgroundColor: colors.navDark,
+    borderRadius: 14,
+    paddingVertical: 14,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.text3,
+  },
+  scanLimitPrimaryText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
     color: colors.textInverse,
