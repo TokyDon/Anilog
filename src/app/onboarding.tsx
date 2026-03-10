@@ -421,18 +421,18 @@ const styles = StyleSheet.create({
   brandWordmark: {
     fontFamily: typography.fontFamily.bodyExtra,
     fontSize: 40,
-    letterSpacing: 8,
+    letterSpacing: 4,
     color: colors.text1,
     textTransform: 'uppercase',
   },
   brandTagline: {
-    fontFamily: typography.fontFamily.body,
-    fontSize: typography.fontSize.md,
+    fontFamily: typography.fontFamily.bodySemiBold,
+    fontSize: typography.fontSize.lg,
     color: colors.text2,
     textAlign: 'center',
-    letterSpacing: 0.4,
+    letterSpacing: 0.2,
     marginTop: 14,
-    lineHeight: typography.fontSize.md * 1.75,
+    lineHeight: typography.fontSize.lg * 1.6,
   },
 
   // Legacy logo mark — kept for safety but replaced by brandHero on step 1
@@ -469,7 +469,7 @@ const styles = StyleSheet.create({
     lineHeight: typography.fontSize['3xl'] * 1.2,
   },
   bodyText: {
-    fontFamily: typography.fontFamily.body,
+    fontFamily: typography.fontFamily.bodyMedium,
     fontSize: typography.fontSize.md,
     color: colors.text2,
     textAlign: 'center',

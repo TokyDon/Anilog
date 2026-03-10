@@ -157,7 +157,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: colors.bg,
     paddingHorizontal: SIDE_PAD,
-    paddingVertical: 16,
+    paddingTop: 16,
+    paddingBottom: 22,
     flexDirection: 'row',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
     color: colors.text3,
     letterSpacing: typography.letterSpacing.widest,
     textTransform: 'uppercase',
-    marginBottom: 3,
+    marginBottom: 4,
   },
   screenTitle: {
     fontFamily: typography.fontFamily.bodyBold,
