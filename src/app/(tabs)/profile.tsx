@@ -201,6 +201,7 @@ export default function ProfileScreen() {
                 key={animon.id}
                 animon={animon}
                 compact
+                showPhoto
                 onPress={handleCardPress}
               />
             ))}
@@ -286,13 +287,13 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.xs,
     color: 'rgba(255,255,255,0.87)',
     marginTop: 4,
-    letterSpacing: 1,
+    letterSpacing: typography.letterSpacing.wide,
   },
 
   // Loading placeholder for stat strip
   loadingStrip: {
     height: 72,
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     marginTop: -1,
     marginBottom: 24,
     alignItems: 'center',
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
   statStrip: {
     flexDirection: 'row',
     backgroundColor: colors.surface2,
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     marginTop: -1,
     borderRadius: 3,
     borderWidth: 1,
@@ -327,7 +328,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   statValue: {
-    fontFamily: typography.fontFamily.monoBold,
+    fontFamily: typography.fontFamily.bodyBold,
     fontSize: typography.fontSize['2xl'],
     color: colors.text1,
     lineHeight: typography.fontSize['2xl'] * 1.1,
@@ -337,25 +338,25 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.xs,
     color: colors.text3,
     marginTop: 4,
-    letterSpacing: 1.5,
+    letterSpacing: typography.letterSpacing.wide,
   },
 
   // Section labels
   sectionHeader: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     marginBottom: 12,
   },
   sectionTitle: {
-    fontFamily: typography.fontFamily.bodyMedium,
+    fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
     color: colors.text3,
-    letterSpacing: 2,
+    letterSpacing: typography.letterSpacing.widest,
     textTransform: 'uppercase',
   },
 
   // Rarity bar
   rarityBarWrap: {
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     marginBottom: 24,
   },
   rarityBar: {
@@ -389,7 +390,7 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
     color: colors.text2,
-    letterSpacing: 0.8,
+    letterSpacing: typography.letterSpacing.label,
   },
 
   // Loading / empty for recent
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   emptyRecent: {
-    marginHorizontal: 20,
+    marginHorizontal: 16,
     marginBottom: 24,
     alignItems: 'center',
     paddingVertical: 24,
@@ -429,14 +430,14 @@ const styles = StyleSheet.create({
 
   // Recent catches
   recentList: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     gap: 10,
     marginBottom: 24,
   },
 
   // Upgrade banner
   bannerWrap: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     marginBottom: 8,
   },
   upgradeBanner: {
@@ -474,7 +475,7 @@ const styles = StyleSheet.create({
   },
   upgradeBtnText: {
     fontFamily: typography.fontFamily.monoBold,
-    fontSize: 13,
+    fontSize: typography.fontSize.sm,
     color: colors.textInverse,
     letterSpacing: 1,
   },

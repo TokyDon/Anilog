@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 28,
   },
   sheetContent: {
-    padding: 20,
+    padding: 16,
     paddingTop: 12,
   },
   sheetHandle: {
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
   },
   dataDate: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 11,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     letterSpacing: 0.8,
   },
@@ -295,13 +295,13 @@ const styles = StyleSheet.create({
   },
   idLabel: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 11,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     letterSpacing: 1.5,
   },
   idValue: {
     fontFamily: typography.fontFamily.monoBold,
-    fontSize: 16,
+    fontSize: typography.fontSize.md,
     color: colors.text1,
     letterSpacing: 1,
   },
@@ -310,7 +310,7 @@ const styles = StyleSheet.create({
   statsGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 10,
+    gap: 12,
     marginBottom: 16,
   },
   statCell: {
@@ -327,20 +327,20 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 10,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     letterSpacing: 1.5,
   },
   statValue: {
-    fontFamily: typography.fontFamily.bodySemiBold,
-    fontSize: 17,
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.md,
     color: colors.text1,
   },
 
   // Capture notes
   notesCard: {
     backgroundColor: colors.surface,
-    borderRadius: 14,
+    borderRadius: 12,
     padding: 16,
     gap: 0,
     borderWidth: 1,
@@ -348,7 +348,7 @@ const styles = StyleSheet.create({
   },
   notesTitle: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 11,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     letterSpacing: 2,
     marginBottom: 12,
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
   },
   noteKey: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 11,
+    fontSize: typography.fontSize.xs,
     color: colors.text3,
     letterSpacing: 1,
   },
