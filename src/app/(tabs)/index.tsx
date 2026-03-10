@@ -6,14 +6,13 @@
  * Empty slots display a dashed "+" invite.
  */
 
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
   Image,
-  Animated,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { colors } from '../../constants/colors';
@@ -31,21 +30,9 @@ interface PartyCardProps {
   slotIndex: number;
 }
 
-function AnimatedEmptyCard({ slotIndex }: { slotIndex: number }) {
-  const pulse = useRef(new Animated.Value(0.45)).current;
-  useEffect(() => {
-    const anim = Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulse, { toValue: 0.9, duration: 1800, useNativeDriver: true }),
-        Animated.timing(pulse, { toValue: 0.45, duration: 1800, useNativeDriver: true }),
-      ]),
-    );
-    anim.start();
-    return () => anim.stop();
-  }, [pulse]);
-
+function EmptyCard({ slotIndex }: { slotIndex: number }) {
   return (
-    <Animated.View style={[styles.emptyCard, { opacity: pulse }]}>
+    <View style={styles.emptyCard}>
       <View style={styles.emptyPhotoPlaceholder}>
         <Text style={styles.emptyPlus}>+</Text>
       </View>
@@ -53,13 +40,13 @@ function AnimatedEmptyCard({ slotIndex }: { slotIndex: number }) {
         <Text style={styles.emptySlotLabel}>SLOT {slotIndex + 1}</Text>
         <Text style={styles.emptySlotSub}>Empty — catch an Anímon to fill</Text>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
 function PartyCard({ slot, slotIndex }: PartyCardProps) {
   if (!slot) {
-    return <AnimatedEmptyCard slotIndex={slotIndex} />;
+    return <EmptyCard slotIndex={slotIndex} />;
   }
 
   const { animon } = slot;
@@ -67,13 +54,15 @@ function PartyCard({ slot, slotIndex }: PartyCardProps) {
 
   return (
     <View style={styles.occupiedCard}>
-      <View style={[styles.typeBar, { backgroundColor: typeColor }]} />
       <View style={styles.cardInner}>
-        <Image
-          source={{ uri: animon.photoUrl }}
-          style={styles.photo}
-          resizeMode="cover"
-        />
+        <View style={styles.photoWrap}>
+          <Image
+            source={{ uri: animon.photoUrl }}
+            style={styles.photo}
+            resizeMode="cover"
+          />
+          <View style={[styles.typeAccentBar, { backgroundColor: typeColor }]} />
+        </View>
         <View style={styles.cardInfo}>
           <View style={styles.cardInfoTop}>
             <Text style={styles.nickname} numberOfLines={1}>{animon.nickname}</Text>
@@ -155,27 +144,29 @@ const styles = StyleSheet.create({
   },
   wordmark: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
+    fontSize: 14,
     letterSpacing: typography.letterSpacing.widest,
-    color: colors.accent,
+    color: colors.text2,
     marginBottom: 4,
   },
   screenTitle: {
-    fontFamily: typography.fontFamily.bodyExtra,
-    fontSize: typography.fontSize['2xl'],
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: 24,
     color: colors.text1,
-    lineHeight: typography.fontSize['2xl'] * 1.1,
+    lineHeight: 26,
   },
   partyBadge: {
-    backgroundColor: colors.accent,
+    backgroundColor: colors.surface2,
     borderRadius: 6,
     paddingHorizontal: 10,
     paddingVertical: 4,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
   partyBadgeText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: typography.fontSize.sm,
-    color: colors.bg,
+    color: colors.text1,
     letterSpacing: typography.letterSpacing.wide,
   },
 
@@ -218,13 +209,26 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    padding: 16,
   },
   photo: {
     width: CARD_PHOTO_SIZE,
     height: CARD_PHOTO_SIZE,
-    borderRadius: 10,
     backgroundColor: colors.surface2,
+  },
+  photoWrap: {
+    width: CARD_PHOTO_SIZE,
+    height: CARD_PHOTO_SIZE,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: colors.surface2,
+  },
+  typeAccentBar: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 2,
   },
   cardInfoTop: {
     flexDirection: 'row',
@@ -238,7 +242,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   levelBadge: {
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.surface2,
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
@@ -248,7 +252,7 @@ const styles = StyleSheet.create({
   levelText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: typography.fontSize.xs,
-    color: colors.accent,
+    color: colors.text2,
     letterSpacing: typography.letterSpacing.wide,
   },
   species: {
@@ -263,28 +267,28 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   typeChip: {
-    backgroundColor: colors.accentSoft,
+    backgroundColor: colors.surface2,
     borderRadius: 4,
     paddingHorizontal: 6,
     paddingVertical: 2,
   },
   typeChipText: {
     fontFamily: typography.fontFamily.mono,
-    fontSize: 9,
-    color: colors.accent,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
     letterSpacing: typography.letterSpacing.label,
   },
 
   // ── Empty slot card ─────────────────────────────────────────────────────────
   emptyCard: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface2,
     borderRadius: 12,
     borderWidth: 1.5,
     borderColor: colors.border,
     borderStyle: 'dashed',
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
+    padding: 16,
   },
   emptyPhotoPlaceholder: {
     width: CARD_PHOTO_SIZE,

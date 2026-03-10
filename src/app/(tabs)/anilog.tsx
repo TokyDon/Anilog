@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
   wordmark: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.sm,
-    color: colors.accent,
+    color: colors.text2,
     letterSpacing: typography.letterSpacing.widest,
     textTransform: 'uppercase',
     marginBottom: 3,
@@ -177,8 +177,9 @@ const styles = StyleSheet.create({
     lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
   },
   specimenBadge: {
+    backgroundColor: colors.surface2,
     borderWidth: 1,
-    borderColor: colors.accent,
+    borderColor: colors.border,
     borderRadius: 3,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
   specimenBadgeText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.accent,
+    color: colors.text2,
     letterSpacing: typography.letterSpacing.label,
   },
 
@@ -210,11 +211,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   filterChipInactive: {
-    backgroundColor: colors.surface,
+    backgroundColor: colors.surface2,
     borderColor: colors.border,
   },
   filterChipActive: {
-    backgroundColor: 'rgba(212,160,23,0.10)',
+    backgroundColor: colors.accentSoft,
     borderColor: colors.accent,
   },
   filterChipText: {
@@ -238,8 +239,6 @@ const styles = StyleSheet.create({
     gap: COLUMN_GAP,
   },
   cardWrapper: {
-    borderTopWidth: 2,
-    borderTopColor: colors.accent,
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     overflow: 'hidden',

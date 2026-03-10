@@ -605,7 +605,7 @@ const styles = StyleSheet.create({
     width: RETICLE_SIZE + 12,
     height: RETICLE_SIZE + 12,
     borderRadius: 8,
-    backgroundColor: colors.success,
+    backgroundColor: 'rgba(255,255,255,0.25)',
   },
   reticle: {
     width: RETICLE_SIZE,
@@ -616,7 +616,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: CORNER,
     height: CORNER,
-    borderColor: colors.text3,
+    borderColor: colors.text1,
   },
   cornerTL: {
     top: 0, left: 0,
@@ -651,9 +651,9 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0, right: 0,
     height: 2,
-    backgroundColor: colors.text3,
+    backgroundColor: colors.text1,
     opacity: 0.75,
-    shadowColor: colors.text3,
+    shadowColor: colors.text1,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.80,
     shadowRadius: 6,
@@ -662,7 +662,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontFamily: typography.fontFamily.mono,
     fontSize: 13,
-    color: colors.accent,
+    color: colors.text1,
     letterSpacing: 2,
   },
 
@@ -701,12 +701,12 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
   },
   scanBadge: {
-    backgroundColor: 'rgba(255,255,255,0.10)',
+    backgroundColor: colors.surface2,
     borderRadius: 10,
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderWidth: 1,
-    borderColor: colors.borderStrong,
+    borderColor: colors.border,
   },
   scanBadgeText: {
     fontFamily: typography.fontFamily.monoBold,
@@ -746,13 +746,15 @@ const styles = StyleSheet.create({
   startBtn: {
     flex: 1,
     marginHorizontal: 16,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.accent,
     borderRadius: 14,
     paddingVertical: 16,
+    minHeight: 48,
     alignItems: 'center',
+    justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.text3,
-    shadowColor: colors.text3,
+    borderColor: colors.accent,
+    shadowColor: colors.accent,
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
@@ -767,16 +769,18 @@ const styles = StyleSheet.create({
   stopBtn: {
     flex: 1,
     marginHorizontal: 16,
+    backgroundColor: colors.surface2,
     borderWidth: 1.5,
-    borderColor: colors.border,
+    borderColor: colors.error,
     borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
+    justifyContent: 'center',
   },
   stopBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.text2,
+    color: colors.error,
     letterSpacing: 1.5,
   },
   statusPill: {
@@ -825,7 +829,7 @@ const styles = StyleSheet.create({
   resultCard: {
     position: 'absolute',
     bottom: 0, left: 0, right: 0,
-    backgroundColor: colors.surface2,
+    backgroundColor: colors.bg,
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
     padding: 24,
@@ -867,9 +871,9 @@ const styles = StyleSheet.create({
   resultInfo: { flex: 1, gap: 4 },
   resultSpecies: {
     fontFamily: typography.fontFamily.bodyBold,
-    fontSize: typography.fontSize['2xl'],
+    fontSize: typography.fontSize.xl,
     color: colors.text1,
-    lineHeight: typography.fontSize['2xl'] * 1.12,
+    lineHeight: typography.fontSize.xl * 1.12,
   },
   resultBreed: {
     fontFamily: typography.fontFamily.body,
@@ -879,7 +883,7 @@ const styles = StyleSheet.create({
   resultConfidence: {
     fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
-    color: colors.accent,
+    color: colors.text2,
     letterSpacing: 1,
   },
   resultTags: {
@@ -911,7 +915,7 @@ const styles = StyleSheet.create({
   viewCollectionBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.bezel,
+    color: colors.textInverse,
     letterSpacing: 1,
   },
   resultActionsRow: {
@@ -920,6 +924,7 @@ const styles = StyleSheet.create({
   },
   retryBtn: {
     flex: 1,
+    backgroundColor: colors.surface2,
     borderWidth: 1.5,
     borderColor: colors.border,
     borderRadius: 14,
@@ -934,22 +939,17 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     flex: 2,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.surface2,
     borderRadius: 14,
     paddingVertical: 14,
     alignItems: 'center',
-    borderWidth: 1,
-    borderColor: colors.text3,
-    shadowColor: colors.text3,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.40,
-    shadowRadius: 8,
-    elevation: 7,
+    borderWidth: 1.5,
+    borderColor: colors.borderStrong,
   },
   addBtnText: {
     fontFamily: typography.fontFamily.monoBold,
     fontSize: 13,
-    color: colors.textInverse,
+    color: colors.text1,
     letterSpacing: 1,
   },
 

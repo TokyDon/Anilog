@@ -1,49 +1,51 @@
 /**
- * Anílog Design Token — Colours v3.1
- * Field Lab palette — deep forest green base, amber gold accent.
- * Expedition journal meets hi-tech bioScanner.
+ * Anílog Design Token — Colours v4
+ * Neutral specimen-log palette.
+ * UI recedes; Animon images and type colours provide all the visual interest.
  */
 export const colors = {
 
-  // ── Backgrounds ────────────────────────────────────────────────────────────
-  bg:       '#0D1F0F',
-  surface:  '#1A2E1C',
-  surface2: '#152317',
+  // ── Backgrounds (near-black dark mode) ────────────────────────────────────
+  bg:       '#111111',   // near-black — premium dark, not green
+  surface:  '#1C1C1E',   // iOS system-grouped secondary (very slightly warm black)
+  surface2: '#2C2C2E',   // iOS tertiary — slightly lighter for inputs, chips
 
   // ── Borders ────────────────────────────────────────────────────────────────
-  border:       '#2E4A2E',
-  borderStrong: '#3D6B3D',
+  border:       '#3A3A3C',   // subtle dark separator
+  borderStrong: '#545456',   // dividers that need to be seen
 
   // ── Text ───────────────────────────────────────────────────────────────────
-  text1:       '#F0EDE4',  // warm off-white — never pure white
-  text2:       '#9BAF8A',  // muted sage green
-  text3:       '#5A7050',  // very muted — ghost/placeholder text
-  textInverse: '#F0EDE4',  // light text on dark surfaces (navDark, bezel)
+  text1:       '#F5F5F5',  // near-white — primary text
+  text2:       '#AEAEB2',  // secondary — iOS label secondary grey
+  text3:       '#636366',  // tertiary — ghost/placeholder
+  textInverse: '#111111',  // dark text on light/amber surfaces
 
-  // ── Accent (amber gold — the LIFE colour) ──────────────────────────────────
-  accent:     '#D4A017',
-  accentSoft: '#2A3D20',  // muted green for chips / tags
-  accentDeep: '#B8860B',  // darker amber for done-state indicators
+  // ── Accent (restrained — used ONLY for primary action buttons) ─────────────
+  // Not amber. Not green. A cool slate-blue that signals "action" without
+  // competing with type chip colours or animon images.
+  accent:     '#4F8EF7',   // clear action blue (accessible on dark bg)
+  accentSoft: '#1C2D4A',   // very dark blue tint for selected chip backgrounds
+  accentDeep: '#2563EB',   // deeper blue for pressed states
 
   // ── Device chrome ──────────────────────────────────────────────────────────
-  bezel:   '#0A1408',
-  navDark: '#080E08',
+  bezel:   '#000000',
+  navDark: '#0A0A0A',
 
-  // ── Rarity ─────────────────────────────────────────────────────────────────
+  // ── Rarity (these are the ONLY high-chroma colours in the whole app) ───────
   rarity: {
-    common:   '#94A3B8',
-    uncommon: '#22C55E',
-    rare:     '#6366F1',
-    glossy:   '#F59E0B',  // static fallback — animated amber→pink→indigo in components
+    common:   '#94A3B8',   // cool grey
+    uncommon: '#22C55E',   // green
+    rare:     '#6366F1',   // indigo
+    glossy:   '#F59E0B',   // amber — ONLY glossy gets this colour
   },
 
   // ── Semantic ───────────────────────────────────────────────────────────────
-  success: '#4CAF50',  // brighter green — pops on dark background
-  error:   '#E57373',
-  warning: '#EAB308',
+  success: '#22C55E',
+  error:   '#EF4444',
+  warning: '#F59E0B',
 
   // ── Overlays ───────────────────────────────────────────────────────────────
-  overlayDark: 'rgba(8,14,8,0.75)',
+  overlayDark: 'rgba(0,0,0,0.72)',
 
 } as const;
 

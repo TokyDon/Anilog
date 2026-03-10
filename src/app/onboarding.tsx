@@ -395,8 +395,8 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   dotActive:   { width: 24, backgroundColor: colors.accent },
-  dotDone:     { width: 8,  backgroundColor: colors.accentDeep },
-  dotInactive: { width: 8,  backgroundColor: colors.border },
+  dotDone:     { width: 8,  backgroundColor: colors.text3 },
+  dotInactive: { width: 8,  backgroundColor: colors.surface2 },
 
   scrollContent: {
     flexGrow: 1,
@@ -421,8 +421,8 @@ const styles = StyleSheet.create({
   brandWordmark: {
     fontFamily: typography.fontFamily.bodyExtra,
     fontSize: 52,
-    letterSpacing: 14,
-    color: colors.accent,
+    letterSpacing: 8,
+    color: colors.text1,
     textTransform: 'uppercase',
   },
   brandTagline: {
@@ -499,7 +499,7 @@ const styles = StyleSheet.create({
   },
   starterCardSelected: {
     borderColor: colors.accent,
-    backgroundColor: 'rgba(212,160,23,0.07)',
+    backgroundColor: colors.accentSoft,
     shadowColor: colors.accent,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.30,
@@ -535,7 +535,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   starterCheckmarkText: {
-    color: colors.bg,
+    color: colors.text1,
     fontSize: 14,
     fontWeight: '700',
   },
