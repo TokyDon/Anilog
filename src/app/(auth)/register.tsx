@@ -157,8 +157,8 @@ export default function RegisterScreen() {
 
           {/* ── Header ─────────────────────────────────────────── */}
           <Text style={styles.screenMeta}>CREATE ACCOUNT</Text>
-          <Text style={styles.headline}>Join Anílog.</Text>
-          <Text style={styles.subHeadline}>Start your field journal today.</Text>
+          <Text style={styles.headline}>Start your field journal.</Text>
+          <Text style={styles.subHeadline}>Create an account to save your discoveries and track your progress across every expedition.</Text>
 
           {/* ── Form card ──────────────────────────────────────── */}
           <Animated.View style={[styles.formCard, { opacity: cardOpacity }]}>
@@ -242,7 +242,7 @@ export default function RegisterScreen() {
             {isLoading ? (
               <ActivityIndicator color={colors.textInverse} size="small" />
             ) : (
-              <Text style={styles.primaryBtnText}>Create account</Text>
+              <Text style={styles.primaryBtnText}>Open my journal</Text>
             )}
           </TouchableOpacity>
 
@@ -300,11 +300,10 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   headline: {
-    fontFamily: typography.fontFamily.bodyExtra,
+    fontFamily: typography.fontFamily.heading,
     fontSize: typography.fontSize['2xl'],
     color: colors.text1,
     lineHeight: typography.fontSize['2xl'] * typography.lineHeight.tight,
-    letterSpacing: typography.letterSpacing.squeezed,
     marginBottom: 4,
   },
   subHeadline: {

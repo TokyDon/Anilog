@@ -143,8 +143,8 @@ export default function LoginScreen() {
 
           {/* ── Header ─────────────────────────────────────────── */}
           <Text style={styles.screenMeta}>SIGN IN</Text>
-          <Text style={styles.headline}>Welcome back.</Text>
-          <Text style={styles.subHeadline}>Your Anímons are waiting.</Text>
+          <Text style={styles.headline}>Back in the field.</Text>
+          <Text style={styles.subHeadline}>Sign in to pick up where you left off.</Text>
 
           {/* ── Form card ──────────────────────────────────────── */}
           <Animated.View style={[styles.formCard, { opacity: cardOpacity }]}>
@@ -158,9 +158,9 @@ export default function LoginScreen() {
                   <Text style={styles.backToLoginText}>← Back to sign in</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.forgotTitle}>Reset your password</Text>
+                <Text style={styles.forgotTitle}>Lost your way in?</Text>
                 <Text style={styles.forgotDesc}>
-                  Enter your email and we'll send you a link to reset your password.
+                  Enter your email and we'll send a trail marker — a link to reset your passphrase.
                 </Text>
 
                 <View style={styles.fieldGroup}>
@@ -202,7 +202,7 @@ export default function LoginScreen() {
                     {resetLoading ? (
                       <ActivityIndicator color={colors.textInverse} size="small" />
                     ) : (
-                      <Text style={styles.primaryBtnText}>Send reset link</Text>
+                      <Text style={styles.primaryBtnText}>Send me a trail marker</Text>
                     )}
                   </TouchableOpacity>
                 )}
@@ -282,7 +282,7 @@ export default function LoginScreen() {
               {isLoading ? (
                 <ActivityIndicator color={colors.textInverse} size="small" />
               ) : (
-                <Text style={styles.primaryBtnText}>Sign in</Text>
+                <Text style={styles.primaryBtnText}>Head back out</Text>
               )}
             </TouchableOpacity>
           )}
@@ -343,11 +343,10 @@ const styles = StyleSheet.create({
     marginBottom: 6,
   },
   headline: {
-    fontFamily: typography.fontFamily.bodyExtra,
+    fontFamily: typography.fontFamily.heading,
     fontSize: typography.fontSize['2xl'],
     color: colors.text1,
     lineHeight: typography.fontSize['2xl'] * typography.lineHeight.tight,
-    letterSpacing: typography.letterSpacing.squeezed,
     marginBottom: 4,
   },
   subHeadline: {

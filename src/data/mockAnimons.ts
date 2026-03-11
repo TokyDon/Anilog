@@ -2,7 +2,7 @@
  * Mock Animon Data
  *
  * 12 realistic Anímon entries used across all screens for UI development.
- * Rarity distribution: 6 common, 3 uncommon, 2 rare, 1 glossy.
+ * Rarity distribution: 6 common, 3 uncommon, 2 rare, 1 super_rare.
  */
 
 import type { Animon } from '../types/animon';
@@ -18,7 +18,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['grass', 'light'],
+    types: ['bird'],
     photoUrl: 'https://images.unsplash.com/photo-1611689342806-0863700ce1e4?w=400',
     region: 'London, UK',
     capturedAt: '2026-03-01T09:15:00Z',
@@ -33,7 +33,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'unknown',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['water', 'ground'],
+    types: ['amphibian'],
     photoUrl: 'https://images.unsplash.com/photo-1579119461344-c4db3c683548?w=400',
     region: 'London, UK',
     capturedAt: '2026-02-28T16:42:00Z',
@@ -48,7 +48,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['ground', 'light'],
+    types: ['dog'],
     photoUrl: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400',
     region: 'New York, USA',
     capturedAt: '2026-02-25T11:30:00Z',
@@ -63,7 +63,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'female',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['grass', 'electric'],
+    types: ['bird'],
     photoUrl: 'https://images.unsplash.com/photo-1444464666168-49d633b86797?w=400',
     region: 'London, UK',
     capturedAt: '2026-02-22T08:05:00Z',
@@ -78,7 +78,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'female',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['psychic', 'light'],
+    types: ['cat'],
     photoUrl: 'https://images.unsplash.com/photo-1560114928-40f1f1eb26a0?w=400',
     region: 'Tokyo, Japan',
     capturedAt: '2026-02-18T14:20:00Z',
@@ -93,7 +93,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'common',
     ageStage: 'adult',
-    types: ['water', 'ice'],
+    types: ['fish'],
     photoUrl: 'https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?w=400',
     region: 'Sydney, Australia',
     capturedAt: '2026-02-15T10:00:00Z',
@@ -109,7 +109,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'uncommon',
     ageStage: 'adult',
-    types: ['fire', 'grass'],
+    types: ['bird'],
     photoUrl: 'https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=400',
     region: 'London, UK',
     capturedAt: '2026-02-12T07:30:00Z',
@@ -124,7 +124,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'female',
     rarity: 'uncommon',
     ageStage: 'adult',
-    types: ['bug', 'psychic'],
+    types: ['insect'],
     photoUrl: 'https://images.unsplash.com/photo-1559715541-f35c11e2e93e?w=400',
     region: 'Cape Town, South Africa',
     capturedAt: '2026-02-08T12:45:00Z',
@@ -139,7 +139,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'uncommon',
     ageStage: 'adult',
-    types: ['ground', 'rock'],
+    types: ['reptile'],
     photoUrl: 'https://images.unsplash.com/photo-1591375462042-3ae3697a83a2?w=400',
     region: 'Sydney, Australia',
     capturedAt: '2026-02-05T15:00:00Z',
@@ -155,7 +155,7 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'male',
     rarity: 'rare',
     ageStage: 'adult',
-    types: ['fire', 'ground'],
+    types: ['mammal'],
     photoUrl: 'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=400',
     region: 'London, UK',
     capturedAt: '2026-02-02T06:15:00Z',
@@ -170,13 +170,13 @@ export const MOCK_ANIMONS: Animon[] = [
     gender: 'female',
     rarity: 'rare',
     ageStage: 'adult',
-    types: ['grass', 'ground'],
+    types: ['mammal'],
     photoUrl: 'https://images.unsplash.com/photo-1484406566174-9da000fda645?w=400',
     region: 'New York, USA',
     capturedAt: '2026-01-28T17:30:00Z',
     confidenceScore: 0.91,
   },
-  // ─── Glossy ───────────────────────────────────────────────────────────────
+  // ─── Super Rare ───────────────────────────────────────────────────────────────
   {
     id: '12',
     userId: 'user_001',
@@ -184,9 +184,9 @@ export const MOCK_ANIMONS: Animon[] = [
     breed: null,
     colour: 'Orange & Black',
     gender: 'male',
-    rarity: 'glossy',
+    rarity: 'super_rare',
     ageStage: 'adult',
-    types: ['fire', 'dragon'],
+    types: ['wild'],
     photoUrl: 'https://images.unsplash.com/photo-1561731216-c3a4d99437d5?w=400',
     region: 'Tokyo, Japan',
     capturedAt: '2026-01-15T08:00:00Z',
@@ -231,9 +231,9 @@ export const NEARBY_ACTIVITY = [
   },
   {
     id: 'a4',
-    message: 'A glossy Bengal Tiger was seen nearby',
+    message: 'A super rare Bengal Tiger was seen nearby',
     region: 'Tokyo, Japan',
     ago: '1d ago',
-    rarity: 'glossy' as const,
+    rarity: 'super_rare' as const,
   },
 ];

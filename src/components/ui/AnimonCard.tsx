@@ -1,26 +1,27 @@
-﻿/**
- * AnimonCard — v3 Clean Modern
+/**
+ * AnimonCard — v4 Flutter Pokédex Style
  *
- * Signature: Dark Footer Strip (navDark background).
- * Type-derived gradient image area. White text in footer.
+ * Full card: full-bleed type-color bg, photo fills card, gradient name overlay,
+ * decorative ring element, accession + rarity floating at top.
+ *
+ * Compact card: horizontal strip — type-colored photo panel left,
+ * neutral text panel right. Used in profile recent-catches list.
  *
  * Variants:
- *   compact=false  Full card — 220px height
- *   compact=true   Compact card — 150px height
- *
- * showPhoto prop: if true renders animon.photoUrl; defaults false (type gradient + emoji).
+ *   compact=false  Full card — 200px height
+ *   compact=true   Horizontal strip — 84px height
  */
 
 import React from 'react';
 import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Image } from 'expo-image';
+import { LinearGradient } from 'expo-linear-gradient';
 import { colors } from '../../constants/colors';
-import { TYPE_DEFINITIONS } from '../../constants/typeSystem';
+import { getTypeDefinition } from '../../constants/typeSystem';
 import { typography } from '../../constants/typography';
 import { TypeTagChip } from './TypeTagChip';
 import { RarityBadge } from './RarityBadge';
 import type { Animon } from '../../types/animon';
-import type { AnimonType } from '../../types/animon';
 
 interface AnimonCardProps {
   animon: Animon;
@@ -29,228 +30,265 @@ interface AnimonCardProps {
   showPhoto?: boolean;
 }
 
-/** Format animon.id as accession number: #-042 */
 function accessionNumber(id: string): string {
   const n = parseInt(id, 10);
-  if (!isNaN(n)) return `#-${String(n).padStart(3, '0')}`;
-  return `#-${id.slice(-3).padStart(3, '0')}`;
+  if (!isNaN(n)) return `#${String(n).padStart(3, '0')}`;
+  return `#${id.slice(-3).padStart(3, '0')}`;
 }
 
-/** Placeholder emoji per type for AI art area */
-function getTypeEmoji(primaryType: AnimonType): string {
-  const map: Record<AnimonType, string> = {
-    fire: '🔥', water: '💧', grass: '🌿', electric: '⚡',
-    ice: '❄️', dragon: '🐉', psychic: '🔮', bug: '🐛',
-    steel: '⚙️', ground: '🏔️', rock: '🪨', light: '✨',
+function getTypeEmoji(primaryType: string): string {
+  const map: Record<string, string> = {
+    mammal: '🦊', bird: '🐦', reptile: '🦎', insect: '🐛',
+    fish: '🐟', amphibian: '🐸', dog: '🐕', cat: '🐈',
+    wild: '🌿', domestic: '🏡',
   };
   return map[primaryType] ?? '◈';
 }
 
 export function AnimonCard({ animon, onPress, compact = false, showPhoto = true }: AnimonCardProps) {
   const primaryType = animon.types[0];
-  const def = TYPE_DEFINITIONS[primaryType];
+  const def = getTypeDefinition(primaryType);
   const typeColor = def.color;
   const textColor = def.textColor;
-  const textAlpha65 = textColor === '#FFFFFF' ? 'rgba(255,255,255,0.65)' : 'rgba(15,23,42,0.65)';
-  const textAlpha50 = textColor === '#FFFFFF' ? 'rgba(255,255,255,0.50)' : 'rgba(15,23,42,0.50)';
+
   const cardShadow = {
     shadowColor: typeColor,
-    shadowOpacity: 0.35,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 6,
+    shadowOpacity: 0.50,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 9,
   };
+
   const accession = accessionNumber(animon.id);
+  const textAlpha = textColor === '#FFFFFF' ? 'rgba(255,255,255,0.65)' : 'rgba(15,23,42,0.55)';
 
-  // ── Image area content ─────────────────────────────────────────────────────
-  const imageArea = (
-    <View style={compact ? styles.compactImageArea : styles.imageArea}>
-      {showPhoto && animon.photoUrl && (
-        <Image
-          source={{ uri: animon.photoUrl }}
-          style={StyleSheet.absoluteFill}
-          contentFit="cover"
-          transition={200}
-        />
-      )}
-      {/* Placeholder emoji — low opacity AI art stand-in */}
-      {(!showPhoto || !animon.photoUrl) && (
-        <Text style={compact ? styles.compactEmoji : styles.emoji}>
-          {getTypeEmoji(primaryType)}
-        </Text>
-      )}
-      {/* Rarity pill — top right */}
-      <View style={styles.rarityPill}>
-        <RarityBadge rarity={animon.rarity} />
-      </View>
-    </View>
-  );
-
+  // ── Compact (horizontal strip) ──────────────────────────────────────────────
   if (compact) {
     return (
       <Pressable
         onPress={() => onPress?.(animon)}
-        style={({ pressed }) => [styles.compactCard, { backgroundColor: typeColor, ...cardShadow }, pressed && styles.pressed]}
+        style={({ pressed }) => [
+          styles.compact,
+          { shadowColor: typeColor, shadowOpacity: 0.30, shadowRadius: 8, shadowOffset: { width: 0, height: 3 }, elevation: 5 },
+          pressed && styles.pressed,
+        ]}
       >
-        {imageArea}
-        {/* Compact footer — same type color */}
-        <View style={[styles.compactFooter, { backgroundColor: typeColor }]}>
-          <Text style={[styles.compactName, { color: textColor }]} numberOfLines={1}>
-            {animon.species}
-          </Text>
-          <View style={styles.compactChips}>
-            {animon.types.slice(0, 1).map((t) => (
-              <TypeTagChip key={t} type={t} size="sm" onCard />
-            ))}
+        {/* Left: type-colored photo panel */}
+        <View style={[styles.compactPhoto, { backgroundColor: typeColor }]}>
+          {showPhoto && animon.photoUrl ? (
+            <Image
+              source={{ uri: animon.photoUrl }}
+              style={StyleSheet.absoluteFill}
+              contentFit="cover"
+              transition={200}
+            />
+          ) : (
+            <Text style={styles.compactEmoji}>{getTypeEmoji(primaryType)}</Text>
+          )}
+          {/* Subtle right-edge fade */}
+          <LinearGradient
+            colors={['transparent', typeColor]}
+            start={{ x: 0.6, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={StyleSheet.absoluteFill}
+          />
+        </View>
+
+        {/* Right: text panel */}
+        <View style={[styles.compactText, { borderLeftColor: typeColor }]}>
+          <Text style={styles.compactName} numberOfLines={1}>{animon.species}</Text>
+          <View style={styles.compactMeta}>
+            <TypeTagChip type={primaryType} size="sm" />
+            <Text style={styles.compactRegion} numberOfLines={1}>{animon.region}</Text>
           </View>
         </View>
+
+        {/* Accession — top right */}
+        <Text style={[styles.compactAccession, { color: textColor === '#FFFFFF' ? typeColor : colors.text3 }]}>
+          {accession}
+        </Text>
       </Pressable>
     );
   }
 
-  // Full card
+  // ── Full card ───────────────────────────────────────────────────────────────
   return (
     <Pressable
       onPress={() => onPress?.(animon)}
       style={({ pressed }) => [styles.card, { backgroundColor: typeColor, ...cardShadow }, pressed && styles.pressed]}
     >
-      {imageArea}
-      {/* Footer — same type color */}
-      <View style={[styles.footer, { backgroundColor: typeColor }]}>
-        <View style={styles.footerLeft}>
-          <Text style={[styles.footerName, { color: textColor }]} numberOfLines={1}>
-            {animon.species}
-          </Text>
-          <Text style={[styles.footerSpecies, { color: textAlpha65 }]} numberOfLines={1}>
-            {animon.breed ?? animon.species}
-          </Text>
-          <View style={styles.footerChips}>
-            {animon.types.slice(0, 2).map((t) => (
-              <TypeTagChip key={t} type={t} size="sm" onCard />
-            ))}
-          </View>
+      {/* Photo fills entire card */}
+      {showPhoto && animon.photoUrl ? (
+        <Image
+          source={{ uri: animon.photoUrl }}
+          style={StyleSheet.absoluteFill}
+          contentFit="cover"
+          transition={300}
+        />
+      ) : (
+        <View style={styles.emojiPlaceholder}>
+          <Text style={styles.emoji}>{getTypeEmoji(primaryType)}</Text>
         </View>
-        <View style={styles.footerRight}>
-          <Text style={[styles.footerAccession, { color: textAlpha50 }]}>{accession}</Text>
-          <Text style={[styles.footerRegion, { color: textAlpha50 }]} numberOfLines={1}>
-            {animon.region}
-          </Text>
+      )}
+
+      {/* Decorative ring — top-right corner design element */}
+      <View style={styles.decorativeRing} />
+
+      {/* Gradient overlay — transparent → type color at bottom */}
+      <LinearGradient
+        colors={['transparent', 'rgba(0,0,0,0.08)', typeColor]}
+        locations={[0, 0.40, 1]}
+        style={styles.gradient}
+      />
+
+      {/* Top row: accession + rarity */}
+      <View style={styles.topRow}>
+        <Text style={[styles.accession, { color: textAlpha }]}>{accession}</Text>
+        <RarityBadge rarity={animon.rarity} />
+      </View>
+
+      {/* Bottom: species name + type chips */}
+      <View style={styles.bottomContent}>
+        <Text style={[styles.speciesName, { color: textColor }]} numberOfLines={2}>
+          {animon.species}
+        </Text>
+        <View style={styles.typeRow}>
+          {animon.types.slice(0, 2).map((t) => (
+            <TypeTagChip key={t} type={t} size="sm" onCard />
+          ))}
         </View>
       </View>
     </Pressable>
   );
 }
 
-const CARD_HEIGHT = 220;
-const COMPACT_HEIGHT = 150;
-const FOOTER_HEIGHT = 72;
-const COMPACT_FOOTER_HEIGHT = 40;
+const CARD_HEIGHT = 200;
+const COMPACT_HEIGHT = 84;
+const COMPACT_PHOTO_WIDTH = 90;
 
 const styles = StyleSheet.create({
-  // ── Full card ──────────────────────────────────────────────────────────────
-  card: {
-    height: CARD_HEIGHT,
-    borderRadius: 12,
-    overflow: 'hidden',
-    flexDirection: 'column',
-  },
   pressed: {
-    transform: [{ scale: 0.97 }],
-    opacity: 0.95,
-  },
-  imageArea: {
-    flex: 1,
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'relative',
-  },
-  emoji: {
-    fontSize: 52,
-    opacity: 0.30,
-  },
-  rarityPill: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-  },
-  footer: {
-    height: FOOTER_HEIGHT,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    paddingBottom: 10,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  footerLeft: {
-    flex: 1,
-    gap: 2,
-  },
-  footerName: {
-    fontFamily: typography.fontFamily.bodyBold,
-    fontSize: typography.fontSize.md,
-    lineHeight: typography.fontSize.md * typography.lineHeight.label,
-  },
-  footerSpecies: {
-    fontFamily: typography.fontFamily.body,
-    fontSize: typography.fontSize.xs,
-    lineHeight: typography.fontSize.xs * typography.lineHeight.label,
-  },
-  footerChips: {
-    flexDirection: 'row',
-    gap: 4,
-    marginTop: 4,
-    flexWrap: 'nowrap',
-  },
-  footerRight: {
-    alignItems: 'flex-end',
-    gap: 2,
-    paddingLeft: 8,
-  },
-  footerAccession: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    letterSpacing: typography.letterSpacing.label,
-  },
-  footerRegion: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    maxWidth: 90,
-    textAlign: 'right',
+    transform: [{ scale: 0.96 }],
+    opacity: 0.92,
   },
 
-  // ── Compact card ───────────────────────────────────────────────────────────
-  compactCard: {
+  // ── Full card ───────────────────────────────────────────────────────────────
+  card: {
+    height: CARD_HEIGHT,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  emojiPlaceholder: {
+    position: 'absolute',
+    top: 0, left: 0, right: 0, bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emoji: {
+    fontSize: 56,
+    opacity: 0.25,
+  },
+  decorativeRing: {
+    position: 'absolute',
+    top: -40,
+    right: -40,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    borderWidth: 24,
+    borderColor: 'rgba(255,255,255,0.10)',
+  },
+  gradient: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: '65%',
+  },
+  topRow: {
+    position: 'absolute',
+    top: 10,
+    left: 12,
+    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  accession: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    letterSpacing: typography.letterSpacing.wide,
+  },
+  bottomContent: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    right: 12,
+    gap: 6,
+  },
+  speciesName: {
+    fontFamily: typography.fontFamily.heading,
+    fontSize: typography.fontSize.lg,
+    lineHeight: typography.fontSize.lg * typography.lineHeight.tight,
+  },
+  typeRow: {
+    flexDirection: 'row',
+    gap: 5,
+    flexWrap: 'nowrap',
+  },
+
+  // ── Compact strip ───────────────────────────────────────────────────────────
+  compact: {
     height: COMPACT_HEIGHT,
     borderRadius: 12,
     overflow: 'hidden',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  compactImageArea: {
-    flex: 1,
+  compactPhoto: {
+    width: COMPACT_PHOTO_WIDTH,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
   },
   compactEmoji: {
-    fontSize: 34,
-    opacity: 0.30,
+    fontSize: 30,
+    opacity: 0.35,
   },
-  compactFooter: {
-    height: COMPACT_FOOTER_HEIGHT,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    gap: 3,
+  compactText: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    justifyContent: 'center',
+    gap: 6,
+    borderLeftWidth: 3,
   },
   compactName: {
-    fontFamily: typography.fontFamily.bodyBold,
-    fontSize: typography.fontSize.sm,
-    lineHeight: typography.fontSize.sm * typography.lineHeight.label,
+    fontFamily: typography.fontFamily.heading,
+    fontSize: typography.fontSize.base,
+    color: colors.text1,
+    lineHeight: typography.fontSize.base * typography.lineHeight.tight,
   },
-  compactChips: {
+  compactMeta: {
     flexDirection: 'row',
-    gap: 3,
+    alignItems: 'center',
+    gap: 7,
+  },
+  compactRegion: {
+    fontFamily: typography.fontFamily.body,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
+    flex: 1,
+  },
+  compactAccession: {
+    position: 'absolute',
+    top: 8,
+    right: 10,
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    letterSpacing: typography.letterSpacing.label,
+    opacity: 0.55,
   },
 });

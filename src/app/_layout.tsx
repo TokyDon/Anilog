@@ -1,8 +1,7 @@
 ﻿/**
  * Anilog Root Layout
  *
- * Sets up fonts, React Query provider, and root navigation.
- * v3: Plus Jakarta Sans replaces Playfair Display + DM Sans.
+ * v5: Plus Jakarta Sans — single clean sans-serif family.
  */
 
 import { useEffect } from 'react';
@@ -20,10 +19,6 @@ import {
   PlusJakartaSans_700Bold,
   PlusJakartaSans_800ExtraBold,
 } from '@expo-google-fonts/plus-jakarta-sans';
-import {
-  SpaceMono_400Regular,
-  SpaceMono_700Bold,
-} from '@expo-google-fonts/space-mono';
 import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import '../../global.css';
@@ -46,8 +41,6 @@ export default function RootLayout() {
     PlusJakartaSans_600SemiBold,
     PlusJakartaSans_700Bold,
     PlusJakartaSans_800ExtraBold,
-    SpaceMono_400Regular,
-    SpaceMono_700Bold,
   });
 
   useEffect(() => {
@@ -79,7 +72,7 @@ export default function RootLayout() {
     return () => subscription.unsubscribe();
   }, [fontsLoaded]);
 
-  if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: '#FAFAF5' }} />;
+  if (!fontsLoaded) return <View style={{ flex: 1, backgroundColor: '#FDFAF5' }} />;
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
