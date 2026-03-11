@@ -21,7 +21,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, router } from 'expo-router';
 import { colors } from '../../constants/colors';
 import { typography } from '../../constants/typography';
-import { TYPE_DEFINITIONS } from '../../constants/typeSystem';
+import { getTypeDefinition } from '../../constants/typeSystem';
 import { RarityBadge } from '../../components/ui/RarityBadge';
 import { TypeTagChip } from '../../components/ui/TypeTagChip';
 import { useCollectionStore } from '../../store/collectionStore';
@@ -73,7 +73,7 @@ export default function AnimonDetailScreen() {
     { label: 'CAUGHT',     value: formatDate(animon.capturedAt) },
   ];
 
-  const typeColor = TYPE_DEFINITIONS[animon.types[0]].color;
+  const typeColor = getTypeDefinition(animon.types[0]).color;
 
   return (
     <View style={[styles.container, { backgroundColor: typeColor }]}>
@@ -201,11 +201,10 @@ const styles = StyleSheet.create({
     right: 20,
   },
   heroSpecies: {
-    fontFamily: typography.fontFamily.bodyExtra,
+    fontFamily: typography.fontFamily.heading,
     fontSize: typography.fontSize['3xl'],
-    fontStyle: 'italic',
     color: colors.textInverse,
-    lineHeight: 36,
+    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
     textShadowColor: 'rgba(0,0,0,0.50)',
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 8,

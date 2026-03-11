@@ -61,12 +61,12 @@ export default function AuthGateScreen() {
 
         {/* Hero headline */}
         <Text style={styles.heroHeadline}>
-          {'The wild is full of\nthings worth catching.'}
+          {'The world is full of things\nthat haven\'t been found yet.'}
         </Text>
 
         {/* Tagline */}
         <Text style={styles.tagline}>
-          {'Spot real animals. Catch them.\nBuild your party.'}
+          {'Anílog is your field journal.\nEvery animal you spot becomes part of your record.'}
         </Text>
       </View>
 
@@ -87,7 +87,7 @@ export default function AuthGateScreen() {
           onPress={() => router.push('/(auth)/register')}
           activeOpacity={0.85}
         >
-          <Text style={styles.primaryBtnText}>Create account</Text>
+          <Text style={styles.primaryBtnText}>Open my journal</Text>
         </TouchableOpacity>
 
         {/* Secondary CTA */}
@@ -96,7 +96,7 @@ export default function AuthGateScreen() {
           onPress={() => router.push('/(auth)/login')}
           activeOpacity={0.85}
         >
-          <Text style={styles.ghostBtnText}>Sign in</Text>
+          <Text style={styles.ghostBtnText}>Head back out</Text>
         </TouchableOpacity>
 
         {/* Legal */}
@@ -115,13 +115,13 @@ export default function AuthGateScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.surfaceDark,
   },
 
   // ── Hero ───────────────────────────────────────────────────────────────────
   hero: {
     flex: 1,
-    backgroundColor: colors.navDark,
+    backgroundColor: colors.surfaceDark,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 32,
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
     marginBottom: 24,
   },
   logoGlyph: {
-    fontFamily: typography.fontFamily.bodyExtra,
+    fontFamily: typography.fontFamily.heading,
     fontSize: 36,
     color: colors.textInverse,
   },

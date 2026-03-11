@@ -199,17 +199,17 @@ export default function OnboardingScreen() {
               <View style={styles.brandHero}>
                 <Text style={styles.brandWordmark}>ANÍLOG</Text>
                 <Text style={styles.brandTagline}>
-                  {`The world is full of creatures.\nStart capturing them.`}
+                  {'The field awaits.'}
                 </Text>
               </View>
               <Text style={styles.stepLabel}>STEP 1 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>What's an Animon?</Text>
+              <Text style={styles.headline}>{'The world is full of things\nthat haven\'t been found yet.'}</Text>
               <Text style={styles.bodyText}>
-                {`An Animon is any real animal you've found out in the wild — a fox crossing the road, a heron on the riverbank, the beetle under a log. You spot it. You catch it. It's yours.\n\nEvery creature you find becomes a permanent part of your collection.`}
+                {`Anílog is your field journal. An Anímon is any real animal you've found — a fox crossing the road, a heron on the riverbank, the beetle under a log. You spot it. You catch it. It's yours.\n\nEvery creature you find becomes a permanent part of your record.`}
               </Text>
               <View style={styles.btnStack}>
                 <TouchableOpacity style={styles.primaryBtn} onPress={advance}>
-                  <Text style={styles.primaryBtnText}>GOT IT</Text>
+                  <Text style={styles.primaryBtnText}>Begin the expedition</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.ghostBtn} onPress={() => goToStep(3)}>
                   <Text style={styles.ghostBtnText}>SKIP TO STARTER</Text>
@@ -223,13 +223,13 @@ export default function OnboardingScreen() {
             <View style={styles.stepContainer}>
               <Text style={styles.permissionEmoji}>📷</Text>
               <Text style={styles.stepLabel}>STEP 2 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>How to catch one</Text>
+              <Text style={styles.headline}>Your eyes in the field.</Text>
               <Text style={styles.bodyText}>
-                {`Open the camera and point it at any animal — or a photo of one. Anílog identifies the species and catches it for you. First time finding that species? It joins your party as a brand new Animon.\n\nAlready got one? Find it again — your collection grows deeper.`}
+                {`Open the camera and point it at any animal. Anílog uses your camera to identify animals in real time. We never store photos without your permission.\n\nFirst time finding that species? It joins your record. Find it again — your collection grows deeper.`}
               </Text>
               <View style={styles.btnStack}>
                 <TouchableOpacity style={styles.primaryBtn} onPress={advance}>
-                  <Text style={styles.primaryBtnText}>MAKES SENSE</Text>
+                  <Text style={styles.primaryBtnText}>Open my eyes</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.ghostBtn} onPress={() => goToStep(3)}>
                   <Text style={styles.ghostBtnText}>SKIP TO STARTER</Text>
@@ -242,9 +242,9 @@ export default function OnboardingScreen() {
           {step === 3 && (
             <View style={styles.stepContainer}>
               <Text style={styles.stepLabel}>STEP 3 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>Choose your first Animon</Text>
+              <Text style={styles.headline}>Every naturalist has a favourite.</Text>
               <Text style={styles.bodyText}>
-                {`Every trainer needs a starter. Pick the Animon that feels like yours — the wild is full of plenty more waiting to be caught.`}
+                {'Pick your first companion. They\'ll join your party from day one.'}
               </Text>
               <View style={styles.starterList}>
                 {STARTER_ANIMONS.map((a) => (
@@ -261,7 +261,7 @@ export default function OnboardingScreen() {
                 onPress={handleConfirmStarter}
                 disabled={!selectedStarter}
               >
-                <Text style={styles.primaryBtnText}>CHOOSE THIS ONE</Text>
+                <Text style={styles.primaryBtnText}>This one's mine</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -318,9 +318,9 @@ export default function OnboardingScreen() {
             <View style={styles.stepContainer}>
               <Text style={styles.permissionEmoji}>📷</Text>
               <Text style={styles.stepLabel}>STEP 5 OF {TOTAL_STEPS}</Text>
-              <Text style={styles.headline}>Your adventure starts here</Text>
+              <Text style={styles.headline}>Your eyes in the field.</Text>
               <Text style={styles.bodyText}>
-                Point your camera at any animal and catch it on the spot. Give Anílog access and start building your party.
+                {'Anílog uses your camera to identify animals in real time. We never store photos without your permission.'}
               </Text>
               {cameraRequested && (
                 <View style={styles.statusBadge}>
@@ -330,7 +330,7 @@ export default function OnboardingScreen() {
               <View style={styles.btnStack}>
                 {!cameraRequested && (
                   <TouchableOpacity style={styles.primaryBtn} onPress={handleRequestCamera}>
-                    <Text style={styles.primaryBtnText}>ALLOW CAMERA</Text>
+                    <Text style={styles.primaryBtnText}>Open my eyes</Text>
                   </TouchableOpacity>
                 )}
                 <TouchableOpacity style={styles.ghostBtn} onPress={advance}>
@@ -465,11 +465,11 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   headline: {
-    fontFamily: typography.fontFamily.bodyExtra,
-    fontSize: typography.fontSize['3xl'],
+    fontFamily: typography.fontFamily.heading,
+    fontSize: typography.fontSize['2xl'],
     color: colors.text1,
     textAlign: 'center',
-    lineHeight: typography.fontSize['3xl'] * 1.2,
+    lineHeight: typography.fontSize['2xl'] * typography.lineHeight.tight,
   },
   bodyText: {
     fontFamily: typography.fontFamily.bodyMedium,
