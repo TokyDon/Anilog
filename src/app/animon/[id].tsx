@@ -1,12 +1,12 @@
 /**
- * Anímon Detail Screen
+ * Anímon Detail Screen — v2 Flutter-style
  *
- * BioField Scanner MK-II — hero with gradient name overlay,
- * data plate, stats grid, capture notes.
+ * Hero image with type-color bg, tab-based bottom sheet:
+ * OVERVIEW · FIELD DATA · NOTES
  * Route: /animon/[id]
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -26,25 +26,33 @@ import { RarityBadge } from '../../components/ui/RarityBadge';
 import { TypeTagChip } from '../../components/ui/TypeTagChip';
 import { useCollectionStore } from '../../store/collectionStore';
 import { usePartyStore } from '../../store/partyStore';
-import { SPECIES_REGISTRY } from '../../data/speciesRegistry';
-import type { SpeciesEntry } from '../../data/speciesRegistry';
-import { getIllustrationUrl, getCapturePhotoUrl } from '../../services/supabase/storage';
-import { getAnimon } from '../../services/supabase/animons';
-import type { Animon } from '../../types/animon';
 
-const { height: H } = Dimensions.get('window');
-const HERO_HEIGHT = 280;
+const { width: W } = Dimensions.get('window');
+const HERO_HEIGHT = 300;
+const TAB_BAR_HEIGHT = 44;
+
+type Tab = 'overview' | 'field' | 'notes';
+
+const TABS: Array<{ key: Tab; label: string }> = [
+  { key: 'overview', label: 'OVERVIEW' },
+  { key: 'field',    label: 'FIELD DATA' },
+  { key: 'notes',    label: 'NOTES' },
+];
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString('en-GB', {
-    day: 'numeric',
-    month: 'short',
-    year: 'numeric',
+    day: 'numeric', month: 'short', year: 'numeric',
   });
 }
 
 function genderLabel(g: string): string {
   return g.charAt(0).toUpperCase() + g.slice(1);
+}
+
+function accessionNumber(id: string): string {
+  const n = parseInt(id, 10);
+  if (!isNaN(n)) return `#${String(n).padStart(3, '0')}`;
+  return `#${id.slice(-3).padStart(3, '0')}`;
 }
 
 export default function AnimonDetailScreen() {
@@ -54,6 +62,8 @@ export default function AnimonDetailScreen() {
   const animon =
     animons.find((a) => a.id === id) ??
     partySlots.flatMap((s) => (s ? [s.animon] : [])).find((a) => a.id === id);
+
+  const [activeTab, setActiveTab] = useState<Tab>('overview');
 
   if (!animon) {
     return (
@@ -66,174 +76,254 @@ export default function AnimonDetailScreen() {
     );
   }
 
-  const STAT_GRID = [
-    { label: 'GENDER',     value: genderLabel(animon.gender) },
-    { label: 'COLOUR',     value: animon.colour },
-    { label: 'CONFIDENCE', value: `${Math.round(animon.confidenceScore * 100)}%` },
-    { label: 'CAUGHT',     value: formatDate(animon.capturedAt) },
-  ];
-
-  const typeColor = getTypeDefinition(animon.types[0]).color;
+  const def = getTypeDefinition(animon.types[0]);
+  const typeColor = def.color;
+  const typeTextColor = def.textColor;
+  const textAlpha = typeTextColor === '#FFFFFF' ? 'rgba(255,255,255,0.65)' : 'rgba(15,23,42,0.55)';
 
   return (
     <View style={[styles.container, { backgroundColor: typeColor }]}>
-      {/* ── Hero Image ──────────────────────────────────────────── */}
+
+      {/* ── Hero ──────────────────────────────────────────────────── */}
       <View style={[styles.hero, { height: HERO_HEIGHT }]}>
+        {/* Decorative ring — top right */}
+        <View style={styles.heroRingOuter} />
+        <View style={styles.heroRingInner} />
+
+        {/* Photo */}
         <Image
           source={{ uri: animon.photoUrl }}
           style={StyleSheet.absoluteFill}
           contentFit="cover"
-          transition={200}
+          transition={300}
         />
-        {/* Gradient fade at bottom */}
+
+        {/* Bottom gradient */}
         <LinearGradient
-          colors={['transparent', 'rgba(17,17,17,0.82)']}
+          colors={['transparent', typeColor]}
+          locations={[0.35, 1]}
           style={styles.heroGradient}
         />
-        {/* Species name on gradient */}
+
+        {/* Species name + breed */}
         <View style={styles.heroNameWrap}>
-          <Text style={styles.heroSpecies} numberOfLines={2}>
+          <Text style={[styles.heroAccession, { color: textAlpha }]}>
+            {accessionNumber(animon.id)}
+          </Text>
+          <Text style={[styles.heroSpecies, { color: typeTextColor }]} numberOfLines={2}>
             {animon.species}
           </Text>
           {animon.breed && (
-            <Text style={styles.heroBreed}>{animon.breed}</Text>
+            <Text style={[styles.heroBreed, { color: textAlpha }]}>{animon.breed}</Text>
           )}
         </View>
       </View>
 
-      {/* ── Floating back button ─────────────────────────────────── */}
+      {/* ── Back button ─────────────────────────────────────────────── */}
       <SafeAreaView style={styles.backSafe} edges={['top']} pointerEvents="box-none">
         <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
           <Text style={styles.backIcon}>←</Text>
         </TouchableOpacity>
       </SafeAreaView>
 
-      {/* ── Bottom Sheet ─────────────────────────────────────────── */}
-      <ScrollView
-        style={[styles.sheet, { marginTop: HERO_HEIGHT - 28 }]}
-        contentContainerStyle={styles.sheetContent}
-        showsVerticalScrollIndicator={false}
-        bounces={false}
-      >
+      {/* ── Bottom sheet ────────────────────────────────────────────── */}
+      <View style={[styles.sheet, { marginTop: HERO_HEIGHT - 28 }]}>
         <View style={styles.sheetHandle} />
 
-        {/* Data plate: types + rarity + date */}
-        <View style={styles.dataPlate}>
-          <View style={styles.typesRow}>
-            {animon.types.map((t) => (
-              <TypeTagChip key={t} type={t} />
-            ))}
-            <RarityBadge rarity={animon.rarity} />
-          </View>
-          <Text style={styles.dataDate}>
-            {formatDate(animon.capturedAt)} · {animon.region}
-          </Text>
+        {/* Type chips + rarity row */}
+        <View style={styles.chipRow}>
+          {animon.types.map((t) => (
+            <TypeTagChip key={t} type={t} />
+          ))}
+          <RarityBadge rarity={animon.rarity} />
         </View>
 
-        {/* ID strip */}
-        <View style={styles.idStrip}>
-          <Text style={styles.idLabel}>SPECIMEN ID</Text>
-          <Text style={styles.idValue}>#{animon.id.padStart(4, '0')}</Text>
-        </View>
-
-        {/* Stats 2×2 grid — dark bezel panels */}
-        <View style={styles.statsGrid}>
-          {STAT_GRID.map((s) => (
-            <View key={s.label} style={styles.statCell}>
-              <Text style={styles.statLabel}>{s.label}</Text>
-              <Text style={styles.statValue}>{s.value}</Text>
-            </View>
+        {/* Tab bar */}
+        <View style={styles.tabBar}>
+          {TABS.map((tab) => (
+            <TouchableOpacity
+              key={tab.key}
+              style={[styles.tabItem, activeTab === tab.key && styles.tabItemActive]}
+              onPress={() => setActiveTab(tab.key)}
+            >
+              <Text style={[styles.tabLabel, activeTab === tab.key && { color: colors.accent }]}>
+                {tab.label}
+              </Text>
+              {activeTab === tab.key && (
+                <View style={[styles.tabIndicator, { backgroundColor: colors.accent }]} />
+              )}
+            </TouchableOpacity>
           ))}
         </View>
 
-        {/* Capture Notes card */}
-        <View style={styles.notesCard}>
-          <Text style={styles.notesTitle}>CAPTURE NOTES</Text>
-          <View style={styles.noteRow}>
-            <Text style={styles.noteKey}>REGION</Text>
-            <Text style={styles.noteVal}>{animon.region}</Text>
-          </View>
-          <View style={styles.noteSep} />
-          <View style={styles.noteRow}>
-            <Text style={styles.noteKey}>CONFIDENCE</Text>
-            <Text style={styles.noteVal}>
-              {Math.round(animon.confidenceScore * 100)}%
-            </Text>
-          </View>
-          <View style={styles.noteSep} />
-          <View style={styles.noteRow}>
-            <Text style={styles.noteKey}>CAPTURED</Text>
-            <Text style={styles.noteVal}>{formatDate(animon.capturedAt)}</Text>
-          </View>
-        </View>
-
-        <View style={{ height: 40 }} />
-      </ScrollView>
+        {/* Tab content */}
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          bounces={false}
+          contentContainerStyle={styles.tabContent}
+        >
+          {activeTab === 'overview' && <OverviewTab animon={animon} typeColor={typeColor} />}
+          {activeTab === 'field' && <FieldDataTab animon={animon} typeColor={typeColor} />}
+          {activeTab === 'notes' && <NotesTab animon={animon} />}
+          <View style={{ height: 40 }} />
+        </ScrollView>
+      </View>
     </View>
   );
 }
 
+// ── Tab panels ────────────────────────────────────────────────────────────────
+
+function OverviewTab({ animon, typeColor }: { animon: NonNullable<ReturnType<typeof useCollectionStore.getState>['animons'][0]>; typeColor: string }) {
+  return (
+    <View style={tab.container}>
+      {/* Stat grid 2×2 */}
+      <View style={tab.grid}>
+        <StatCell label="GENDER"    value={genderLabel(animon.gender)} accent={typeColor} />
+        <StatCell label="COLOUR"    value={animon.colour}              accent={typeColor} />
+        <StatCell label="REGION"    value={animon.region}              accent={typeColor} />
+        <StatCell label="CAUGHT"    value={formatDate(animon.capturedAt)} accent={typeColor} />
+      </View>
+    </View>
+  );
+}
+
+function FieldDataTab({ animon, typeColor }: { animon: NonNullable<ReturnType<typeof useCollectionStore.getState>['animons'][0]>; typeColor: string }) {
+  const conf = Math.round(animon.confidenceScore * 100);
+  return (
+    <View style={tab.container}>
+      {/* Confidence bar */}
+      <View style={tab.section}>
+        <Text style={tab.sectionTitle}>SCAN CONFIDENCE</Text>
+        <View style={tab.barTrack}>
+          <View style={[tab.barFill, { width: `${conf}%` as any, backgroundColor: typeColor }]} />
+        </View>
+        <Text style={[tab.barLabel, { color: typeColor }]}>{conf}%</Text>
+      </View>
+
+      {/* Specimen ID */}
+      <View style={tab.idStrip}>
+        <Text style={tab.idLabel}>SPECIMEN ID</Text>
+        <Text style={tab.idValue}>#{animon.id.padStart(4, '0')}</Text>
+      </View>
+
+      {/* Age & rarity */}
+      <View style={tab.grid}>
+        <StatCell label="AGE STAGE"  value={animon.ageStage ?? '—'} accent={typeColor} />
+        <StatCell label="RARITY"     value={animon.rarity.toUpperCase()} accent={typeColor} />
+      </View>
+    </View>
+  );
+}
+
+function NotesTab({ animon }: { animon: NonNullable<ReturnType<typeof useCollectionStore.getState>['animons'][0]> }) {
+  const rows: Array<{ key: string; value: string }> = [
+    { key: 'REGION',    value: animon.region },
+    { key: 'CAPTURED',  value: formatDate(animon.capturedAt) },
+    { key: 'CONFIDENCE', value: `${Math.round(animon.confidenceScore * 100)}%` },
+    { key: 'GENDER',    value: genderLabel(animon.gender) },
+    { key: 'COLOUR',    value: animon.colour },
+  ];
+  return (
+    <View style={tab.container}>
+      <View style={tab.notesCard}>
+        <Text style={tab.sectionTitle}>CAPTURE NOTES</Text>
+        {rows.map((row, i) => (
+          <View key={row.key}>
+            {i > 0 && <View style={tab.sep} />}
+            <View style={tab.noteRow}>
+              <Text style={tab.noteKey}>{row.key}</Text>
+              <Text style={tab.noteVal}>{row.value}</Text>
+            </View>
+          </View>
+        ))}
+      </View>
+    </View>
+  );
+}
+
+function StatCell({ label, value, accent }: { label: string; value: string; accent: string }) {
+  return (
+    <View style={[tab.statCell, { borderTopColor: accent, borderTopWidth: 2 }]}>
+      <Text style={tab.statLabel}>{label}</Text>
+      <Text style={tab.statValue}>{value}</Text>
+    </View>
+  );
+}
+
+// ── Styles ────────────────────────────────────────────────────────────────────
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.bg,
   },
 
   // Hero
   hero: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
+    top: 0, left: 0, right: 0,
     overflow: 'hidden',
+  },
+  heroRingOuter: {
+    position: 'absolute',
+    top: -60, right: -60,
+    width: 240, height: 240,
+    borderRadius: 120,
+    borderWidth: 36,
+    borderColor: 'rgba(255,255,255,0.08)',
+    zIndex: 1,
+  },
+  heroRingInner: {
+    position: 'absolute',
+    top: 20, right: 20,
+    width: 120, height: 120,
+    borderRadius: 60,
+    borderWidth: 18,
+    borderColor: 'rgba(255,255,255,0.06)',
+    zIndex: 1,
   },
   heroGradient: {
     position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 130,
+    bottom: 0, left: 0, right: 0,
+    height: '75%',
   },
   heroNameWrap: {
     position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
+    bottom: 24, left: 20, right: 20,
+    gap: 2,
+  },
+  heroAccession: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    letterSpacing: typography.letterSpacing.widest,
+    marginBottom: 4,
   },
   heroSpecies: {
     fontFamily: typography.fontFamily.heading,
-    fontSize: typography.fontSize['3xl'],
-    color: colors.textInverse,
-    lineHeight: typography.fontSize['3xl'] * typography.lineHeight.tight,
-    textShadowColor: 'rgba(0,0,0,0.50)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 8,
+    fontSize: typography.fontSize['2xl'],
+    lineHeight: typography.fontSize['2xl'] * typography.lineHeight.tight,
   },
   heroBreed: {
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.sm,
-    color: 'rgba(245,240,232,0.80)',
-    marginTop: 3,
+    marginTop: 2,
   },
 
   // Back button
   backSafe: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
+    top: 0, left: 0, right: 0,
   },
   backBtn: {
     marginTop: 12,
     marginLeft: 16,
-    width: 42,
-    height: 42,
+    width: 42, height: 42,
     borderRadius: 21,
-    backgroundColor: 'rgba(0,0,0,0.55)',
+    backgroundColor: 'rgba(0,0,0,0.45)',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
+    borderColor: 'rgba(255,255,255,0.18)',
   },
   backIcon: {
     fontSize: 18,
@@ -248,129 +338,54 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 28,
     borderTopRightRadius: 28,
   },
-  sheetContent: {
-    padding: 16,
-    paddingTop: 12,
-  },
   sheetHandle: {
-    width: 40,
-    height: 4,
+    width: 40, height: 4,
     backgroundColor: colors.border,
     borderRadius: 2,
     alignSelf: 'center',
-    marginBottom: 18,
-  },
-
-  // Data plate
-  dataPlate: {
+    marginTop: 10,
     marginBottom: 14,
-    gap: 8,
   },
-  typesRow: {
+  chipRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
+    paddingHorizontal: 16,
+    marginBottom: 14,
     alignItems: 'center',
   },
-  dataDate: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    color: colors.text3,
-    letterSpacing: 0.8,
-  },
 
-  // ID strip
-  idStrip: {
+  // Tab bar
+  tabBar: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: colors.border,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+    marginHorizontal: 16,
+    height: TAB_BAR_HEIGHT,
   },
-  idLabel: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    color: colors.text3,
-    letterSpacing: 1.5,
-  },
-  idValue: {
-    fontFamily: typography.fontFamily.monoBold,
-    fontSize: typography.fontSize.md,
-    color: colors.text1,
-    letterSpacing: 1,
-  },
-
-  // Stats grid
-  statsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    marginBottom: 16,
-  },
-  statCell: {
+  tabItem: {
     flex: 1,
-    minWidth: '44%',
-    height: 80,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 14,
-    gap: 6,
+    alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: colors.border,
+    position: 'relative',
   },
-  statLabel: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    color: colors.text3,
-    letterSpacing: 1.5,
-  },
-  statValue: {
+  tabItemActive: {},
+  tabLabel: {
     fontFamily: typography.fontFamily.bodyBold,
-    fontSize: typography.fontSize.md,
-    color: colors.text1,
-  },
-
-  // Capture notes
-  notesCard: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 16,
-    gap: 0,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  notesTitle: {
-    fontFamily: typography.fontFamily.mono,
     fontSize: typography.fontSize.xs,
     color: colors.text3,
-    letterSpacing: 2,
-    marginBottom: 12,
+    letterSpacing: typography.letterSpacing.wide,
   },
-  noteRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
+  tabIndicator: {
+    position: 'absolute',
+    bottom: 0,
+    left: 8, right: 8,
+    height: 2,
+    borderRadius: 1,
   },
-  noteSep: {
-    height: 1,
-    backgroundColor: colors.border,
-  },
-  noteKey: {
-    fontFamily: typography.fontFamily.mono,
-    fontSize: typography.fontSize.xs,
-    color: colors.text3,
-    letterSpacing: 1,
-  },
-  noteVal: {
-    fontFamily: typography.fontFamily.bodyMedium,
-    fontSize: typography.fontSize.sm,
-    color: colors.text1,
+  tabContent: {
+    paddingTop: 16,
+    paddingHorizontal: 16,
   },
 
   // Not found
@@ -384,5 +399,119 @@ const styles = StyleSheet.create({
     fontFamily: typography.fontFamily.body,
     fontSize: typography.fontSize.base,
     color: colors.text2,
+  },
+});
+
+const tab = StyleSheet.create({
+  container: { gap: 16 },
+
+  // Stat grid
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+  },
+  statCell: {
+    flex: 1,
+    minWidth: '44%',
+    backgroundColor: colors.surface,
+    borderRadius: 10,
+    padding: 14,
+    gap: 4,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  statLabel: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
+    letterSpacing: typography.letterSpacing.wide,
+  },
+  statValue: {
+    fontFamily: typography.fontFamily.heading,
+    fontSize: typography.fontSize.md,
+    color: colors.text1,
+    lineHeight: typography.fontSize.md * typography.lineHeight.tight,
+  },
+
+  // Section title
+  sectionTitle: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
+    letterSpacing: typography.letterSpacing.widest,
+    marginBottom: 10,
+  },
+
+  // Confidence bar
+  section: { gap: 0 },
+  barTrack: {
+    height: 10,
+    backgroundColor: colors.surface2,
+    borderRadius: 5,
+    overflow: 'hidden',
+  },
+  barFill: {
+    height: 10,
+    borderRadius: 5,
+  },
+  barLabel: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.sm,
+    marginTop: 6,
+    letterSpacing: typography.letterSpacing.label,
+  },
+
+  // Specimen ID strip
+  idStrip: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  idLabel: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
+    letterSpacing: typography.letterSpacing.wide,
+  },
+  idValue: {
+    fontFamily: typography.fontFamily.heading,
+    fontSize: typography.fontSize.md,
+    color: colors.text1,
+  },
+
+  // Notes tab
+  notesCard: {
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  sep: {
+    height: 1,
+    backgroundColor: colors.border,
+  },
+  noteRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+  noteKey: {
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
+    color: colors.text3,
+    letterSpacing: typography.letterSpacing.label,
+  },
+  noteVal: {
+    fontFamily: typography.fontFamily.body,
+    fontSize: typography.fontSize.sm,
+    color: colors.text1,
   },
 });

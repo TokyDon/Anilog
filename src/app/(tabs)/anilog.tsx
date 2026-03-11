@@ -29,8 +29,8 @@ import { ANIMON_TYPES, getTypeDefinition } from '../../constants/typeSystem';
 import type { Animon } from '../../types/animon';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const COLUMN_GAP = 12;
-const SIDE_PAD = 16;
+const COLUMN_GAP = 10;
+const SIDE_PAD = 12;
 const CARD_WIDTH = (SCREEN_WIDTH - SIDE_PAD * 2 - COLUMN_GAP) / 2;
 
 type FilterOption = 'all' | string;
@@ -109,6 +109,10 @@ export default function AnilogScreen() {
               ]}
               onPress={() => setActiveFilter(opt.key)}
             >
+              {/* Colored dot on inactive type chips */}
+              {!isActive && typeColor && (
+                <View style={[styles.filterDot, { backgroundColor: typeColor }]} />
+              )}
               <Text
                 style={[
                   styles.filterChipText,
@@ -229,20 +233,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.accent,
     borderColor: colors.accent,
   },
+  filterDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginRight: 2,
+  },
   filterChipText: {
-    fontFamily: typography.fontFamily.bodyMedium,
-    fontSize: typography.fontSize.sm,
+    fontFamily: typography.fontFamily.bodyBold,
+    fontSize: typography.fontSize.xs,
     letterSpacing: typography.letterSpacing.label,
   },
   filterChipTextInactive: {
-    color: colors.text3,
+    color: colors.text2,
   },
 
   // Grid
   grid: {
     backgroundColor: colors.bg,
     paddingHorizontal: SIDE_PAD,
-    paddingTop: 12,
+    paddingTop: 14,
     paddingBottom: 24,
     gap: COLUMN_GAP,
   },
